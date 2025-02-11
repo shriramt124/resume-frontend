@@ -58,10 +58,9 @@ const ProfilePage = () => {
         } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(profileData.email)) {
             newErrors.email = 'Invalid email address';
         }
-        if (!profileData.phone.trim()) {
-            newErrors.phone = 'Phone is required';
-        } else if (!/^\+?[1-9]\d{1,14}$/.test(profileData.phone.replace(/\s+/g, ''))) {
-            newErrors.phone = 'Invalid phone number';
+        // Phone validation only if a phone number is provided
+        if (profileData.phone.trim() && !/^[1-9]\d{9}$/.test(profileData.phone.replace(/\s+/g, ''))) {
+            newErrors.phone = 'Invalid phone number (should be 10 digits)';
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -76,7 +75,7 @@ const ProfilePage = () => {
         setSuccess('');
 
         try {
-            const response = await fetch('https://hiremeai.in/api/profile/update', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_WEB_URL}/api/profile/update`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -208,10 +207,10 @@ const ProfilePage = () => {
                             )}
                         </div>
 
-                        {/* Phone */}
+                        {/* Phone (Optional) */}
                         <div className="w-full">
                             <label className="block text-gray-600 mb-2 text-sm">
-                                Phone Number
+                                Phone Number (Optional)
                             </label>
                             <div className={`relative rounded-lg border ${
                                 errors.phone ? 'border-red-300' : 'border-gray-300'
@@ -224,12 +223,16 @@ const ProfilePage = () => {
                                     type="tel"
                                     value={profileData.phone}
                                     onChange={(e) => {
-                                        setProfileData({...profileData, phone: e.target.value});
-                                        if (errors.phone) setErrors({...errors, phone: ''});
+                                        const value = e.target.value.replace(/\D/g, '');
+                                        if (value.length <= 10) {
+                                            setProfileData({...profileData, phone: value});
+                                            if (errors.phone) setErrors({...errors, phone: ''});
+                                        }
                                     }}
                                     disabled={!isEditing || loading}
                                     className="w-full pl-12 pr-4 py-3.5 bg-transparent outline-none disabled:text-gray-500"
-                                    placeholder="Enter your phone number"
+                                    placeholder="Enter your phone number (optional)"
+                                    maxLength="10"
                                 />
                             </div>
                             {errors.phone && (

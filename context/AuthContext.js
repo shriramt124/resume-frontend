@@ -31,7 +31,7 @@ export function AuthProvider({children}) {
 
             // We have a token in URL - fetch user details
             try {
-                const response = await fetch('https://hiremeai.in/api/get-customer-details', {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_WEB_URL}/api/get-customer-details`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,

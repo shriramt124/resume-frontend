@@ -10,7 +10,14 @@ import Others from "@/components/sections/Others";
 import {uuid} from "uuidv4";
 import ResumeModal from "@/components/ResumeModal";
 import DownloadSection from "@/components/DownloadSection";
-
+// First, add this import at the top with other imports
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 export default function Builder() {
     const [currentSection, setCurrentSection] = useState('personal');
     const [profileData, setProfileData] = useState({});
@@ -156,7 +163,6 @@ export default function Builder() {
                 return null;
         }
     };
-
     const updateFormData = (field, value) => {
         setFormData(prev => ({
             ...prev,
@@ -206,18 +212,37 @@ export default function Builder() {
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={() => setIsModalOpen(true)}
-                                    className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                                    className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                                 >
                                     <Eye className="w-5 h-5"/>
                                     <span className="hidden md:inline">Preview</span>
                                 </button>
-                                <button
-                                    onClick={() => setShowDownloadSection(true)}
-                                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                                >
-                                    <Download className="w-5 h-5"/>
-                                    <span className="hidden md:inline">Download</span>
-                                </button>
+
+                                <div className="flex items-center gap-2">
+                                    <Select
+                                        value={selectedTemplate}
+                                        onValueChange={setSelectedTemplate}
+                                    >
+                                        <SelectTrigger className="w-[130px] h-[40px] border-gray-200">
+                                            <SelectValue placeholder="Select template" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
+                                                <SelectItem key={num} value={`demo${num}`}>
+                                                    Demo {num}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+
+                                    <button
+                                        onClick={() => setShowDownloadSection(true)}
+                                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors h-[40px]"
+                                    >
+                                        <Download className="w-5 h-5"/>
+                                        <span className="hidden md:inline">Download</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

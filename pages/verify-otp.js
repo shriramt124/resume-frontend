@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Phone, ArrowRight, Loader2, ArrowLeft } from 'lucide-react';
+import { Mail, ArrowRight, Loader2, ArrowLeft } from 'lucide-react';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import Layout from '@/components/Layout';
 import { useRouter } from 'next/router';
@@ -8,7 +8,7 @@ import Link from 'next/link';
 const VerifyOtpPage = () => {
     const router = useRouter();
     const [otp, setOtp] = useState('');
-    const [mobile, setMobile] = useState('');
+    const [email, setEmail] = useState('');
     const [timer, setTimer] = useState(60);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -16,11 +16,11 @@ const VerifyOtpPage = () => {
     const [showAlert, setShowAlert] = useState(false);
 
     useEffect(() => {
-        const storedMobile = sessionStorage.getItem('verifyMobile');
-        if (!storedMobile) {
+        const storedEmail = sessionStorage.getItem('verifyEmail');
+        if (!storedEmail) {
             router.replace('/login');
         } else {
-            setMobile(storedMobile);
+            setEmail(storedEmail);
         }
     }, [router]);
 
@@ -51,10 +51,10 @@ const VerifyOtpPage = () => {
 
         setLoading(true);
         try {
-            const response = await fetch('https://hiremeai.in/api/auth/send-otp', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_WEB_URL}/api/auth/send-otp`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mobile }),
+                body: JSON.stringify({ email }),
             });
 
             const data = await response.json();
@@ -78,10 +78,10 @@ const VerifyOtpPage = () => {
 
         setLoading(true);
         try {
-            const response = await fetch('https://hiremeai.in/api/auth/verify-otp', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_WEB_URL}/api/auth/verify-otp`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mobile, otp }),
+                body: JSON.stringify({ email, otp }),
             });
 
             const data = await response.json();
@@ -93,7 +93,7 @@ const VerifyOtpPage = () => {
                 localStorage.removeItem('profileData');
                 router.push('/builder?templateId=modern');
             } else {
-                sessionStorage.setItem('registerMobile', mobile);
+                sessionStorage.setItem('registerEmail', email);
                 router.push('/complete-profile');
             }
         } catch (err) {
@@ -121,7 +121,7 @@ const VerifyOtpPage = () => {
                             Verify OTP
                         </h1>
                         <p className="text-lg text-gray-600">
-                            Enter the OTP sent to <span className="font-medium">+91 {mobile}</span>
+                            Enter the OTP sent to <span className="font-medium">{email}</span>
                         </p>
                     </div>
 
@@ -207,7 +207,7 @@ const VerifyOtpPage = () => {
                             onClick={() => router.push('/login')}
                             className="text-blue-500 hover:underline"
                         >
-                            Change phone number
+                            Change email address
                         </button>
                     </p>
                 </div>

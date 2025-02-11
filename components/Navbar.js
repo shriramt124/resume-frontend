@@ -40,7 +40,7 @@ const Navbar = () => {
     const fetchProfiles = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch('https://hiremeai.in/api/get-resume', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_WEB_URL}/api/get-resume`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

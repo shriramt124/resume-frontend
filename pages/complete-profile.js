@@ -13,16 +13,16 @@ const CompleteProfilePage = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
-        email: '',
-        mobile: ''
+        phone: '',
+        email: ''
     });
 
     useEffect(() => {
-        const storedMobile = sessionStorage.getItem('registerMobile');
-        if (!storedMobile) {
+        const storedEmail = sessionStorage.getItem('registerEmail');
+        if (!storedEmail) {
             router.replace('/login');
         } else {
-            setFormData(prev => ({ ...prev, mobile: storedMobile }));
+            setFormData(prev => ({ ...prev, email: storedEmail }));
         }
     }, [router]);
 
@@ -38,8 +38,8 @@ const CompleteProfilePage = () => {
         }
     }, [error, success]);
 
-    const validateEmail = (email) => {
-        return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email);
+    const validatePhone = (phone) => {
+        return /^[1-9]\d{9}$/.test(phone);
     };
 
     const validateForm = () => {
@@ -47,8 +47,8 @@ const CompleteProfilePage = () => {
             setError('Name is required');
             return false;
         }
-        if (!validateEmail(formData.email)) {
-            setError('Please enter a valid email address');
+        if (formData.phone && !validatePhone(formData.phone)) {
+            setError('Please enter a valid phone number');
             return false;
         }
         return true;
@@ -60,7 +60,7 @@ const CompleteProfilePage = () => {
 
         setLoading(true);
         try {
-            const response = await fetch('https://hiremeai.in/api/auth/complete-profile', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_WEB_URL}/api/auth/complete-profile`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
@@ -127,18 +127,18 @@ const CompleteProfilePage = () => {
                     </div>
 
                     <form onSubmit={handleCompleteProfile} className="space-y-6">
-                        {/* Mobile Number (Disabled) */}
+                        {/* Email Address (Disabled) */}
                         <div className="w-full">
                             <label className="block text-gray-600 mb-2 text-sm">
-                                Phone Number
+                                Email Address
                             </label>
                             <div className="relative rounded-lg border border-gray-200 bg-gray-50">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                                    <Phone className="w-5 h-5 text-gray-400" />
+                                    <Mail className="w-5 h-5 text-gray-400" />
                                 </div>
                                 <input
-                                    type="tel"
-                                    value={formData.mobile}
+                                    type="email"
+                                    value={formData.email}
                                     disabled
                                     className="w-full pl-12 pr-4 py-3.5 bg-transparent text-gray-500"
                                 />
@@ -168,30 +168,35 @@ const CompleteProfilePage = () => {
                             </div>
                         </div>
 
-                        {/* Email Address */}
+                        {/* Phone Number (Optional) */}
                         <div className="w-full">
                             <label className="block text-gray-600 mb-2 text-sm">
-                                Email Address
+                                Phone Number (Optional)
                             </label>
                             <div className="relative rounded-lg border border-gray-300 hover:border-blue-400 focus-within:border-blue-500 transition-colors">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                                    <Mail className="w-5 h-5 text-blue-500" />
+                                    <Phone className="w-5 h-5 text-blue-500" />
                                 </div>
                                 <input
-                                    type="email"
-                                    value={formData.email}
-                                    onChange={(e) => setFormData(prev => ({
-                                        ...prev,
-                                        email: e.target.value
-                                    }))}
+                                    type="tel"
+                                    value={formData.phone}
+                                    onChange={(e) => {
+                                        const value = e.target.value.replace(/\D/g, '');
+                                        if (value.length <= 10) {
+                                            setFormData(prev => ({
+                                                ...prev,
+                                                phone: value
+                                            }));
+                                        }
+                                    }}
                                     className="w-full pl-12 pr-4 py-3.5 bg-transparent outline-none"
-                                    placeholder="Enter your email address"
-                                    required
+                                    placeholder="Enter your phone number"
+                                    maxLength="10"
                                 />
                             </div>
-                            {formData.email && !validateEmail(formData.email) && (
+                            {formData.phone && !validatePhone(formData.phone) && (
                                 <p className="mt-2 text-sm text-red-500">
-                                    Please enter a valid email address
+                                    Please enter a valid 10-digit phone number
                                 </p>
                             )}
                         </div>
@@ -199,7 +204,7 @@ const CompleteProfilePage = () => {
                         {/* Submit Button */}
                         <button
                             type="submit"
-                            disabled={loading || !formData.name || !validateEmail(formData.email)}
+                            disabled={loading || !formData.name || (formData.phone && !validatePhone(formData.phone))}
                             className="w-full py-3.5 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600
                             transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
                             flex items-center justify-center space-x-2"

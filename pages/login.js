@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Phone, ArrowRight, Loader2 } from 'lucide-react';
+import { Mail, ArrowRight, Loader2 } from 'lucide-react';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import Layout from '@/components/Layout';
 import { useRouter } from 'next/router';
 
 const LoginPage = () => {
     const router = useRouter();
-    const [mobile, setMobile] = useState('');
+    const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -24,28 +24,30 @@ const LoginPage = () => {
         }
     }, [error, success]);
 
-    const validateMobile = (number) => /^[1-9]\d{9}$/.test(number);
+    const validateEmail = (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
 
     const handleSendOTP = async (e) => {
         e.preventDefault();
-        if (!validateMobile(mobile)) {
-            setError('Please enter a valid 10-digit mobile number');
+        if (!validateEmail(email)) {
+            setError('Please enter a valid email address');
             return;
         }
 
         setLoading(true);
         try {
-            const response = await fetch('https://hiremeai.in/api/auth/send-otp', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_WEB_URL}/api/auth/send-otp`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mobile }),
+                body: JSON.stringify({ email }),
             });
 
             const data = await response.json();
             if (!response.ok) throw new Error(data.message || 'Failed to send OTP');
 
             setSuccess('OTP sent successfully!');
-            sessionStorage.setItem('verifyMobile', mobile);
+            sessionStorage.setItem('verifyEmail', email);
             router.push('/verify-otp');
         } catch (err) {
             setError(err.message);
@@ -63,7 +65,7 @@ const LoginPage = () => {
                             Welcome Back
                         </h1>
                         <p className="text-lg text-gray-600">
-                            Login with your mobile number to continue
+                            Login with your email address to continue
                         </p>
                     </div>
 
@@ -92,35 +94,31 @@ const LoginPage = () => {
                     <form onSubmit={handleSendOTP} className="space-y-6">
                         <div className="w-full">
                             <label className="block text-gray-600 mb-2 text-md">
-                                Phone Number
+                                Email Address
                             </label>
                             <div className="relative rounded-lg border border-gray-300 hover:border-blue-400 focus-within:border-blue-500 transition-colors">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                                    <Phone className="w-5 h-5 text-blue-500" />
+                                    <Mail className="w-5 h-5 text-blue-500" />
                                 </div>
                                 <input
-                                    type="tel"
-                                    value={mobile}
-                                    onChange={(e) => {
-                                        const value = e.target.value.replace(/\D/g, '');
-                                        if (value.length <= 10) setMobile(value);
-                                    }}
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     className="w-full pl-12 pr-4 py-3.5 bg-transparent outline-none text-gray-900 placeholder-gray-500"
-                                    placeholder="Enter your mobile number"
-                                    maxLength="10"
+                                    placeholder="Enter your email address"
                                     required
                                 />
                             </div>
-                            {mobile && !validateMobile(mobile) && (
+                            {email && !validateEmail(email) && (
                                 <p className="mt-2 text-sm text-red-500">
-                                    Please enter a valid mobile number
+                                    Please enter a valid email address
                                 </p>
                             )}
                         </div>
 
                         <button
                             type="submit"
-                            disabled={loading || mobile.length !== 10}
+                            disabled={loading || !validateEmail(email)}
                             className="w-full py-3.5 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600
                             transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
                             flex items-center justify-center space-x-2"

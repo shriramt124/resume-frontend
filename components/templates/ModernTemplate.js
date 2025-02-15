@@ -1,73 +1,19 @@
-import { useState } from "react";
-import { FaBold, FaFont, FaItalic } from "react-icons/fa";
-import ColorPicker from "@/components/sections/ColorPicker";
-
-// Default data for preview
-const defaultData = {
-  first_name: "John",
-  last_name: "Doe",
-  occupation: "Software Engineer",
-  email: "john.doe@example.com",
-  phone: "+1 234 567 890",
-  city: "New York",
-  country: "USA",
-  professional_description: "<p>Experienced software engineer with a passion for building scalable and efficient web applications. Proficient in JavaScript, React, and Node.js.</p>",
-  job_title: ["Senior Software Engineer", "Software Engineer"],
-  employer: ["Tech Corp", "Innovate Inc"],
-  job_begin: ["2018", "2015"],
-  job_end: ["Present", "2018"],
-  job_description: [
-    "<p>Led a team of developers to build a scalable e-commerce platform.</p>",
-    "<p>Developed and maintained web applications using React and Node.js.</p>"
-  ],
-  college: ["University of Tech", "State College"],
-  degree: ["Bachelor of Science in Computer Science", "Associate Degree in IT"],
-  college_begin: ["2011", "2009"],
-  college_end: ["2015", "2011"],
-  college_description: [
-    "<p>Graduated with honors, focusing on software development and algorithms.</p>",
-    "<p>Completed foundational courses in programming and systems design.</p>"
-  ],
-  internship_title: ["Software Development Intern"],
-  internship_summary: [
-    "<p>Assisted in the development of a mobile application using Flutter.</p>"
-  ],
-  certificate_title: ["Certified JavaScript Developer"],
-  certificate_description: [
-    "<p>Completed advanced JavaScript courses and passed the certification exam.</p>"
-  ],
-  other_title: ["Volunteer Work"],
-  other_description: [
-    "<p>Volunteered as a mentor for coding bootcamps, helping students learn programming basics.</p>"
-  ],
-  skill: ["JavaScript", "React", "Node.js", "Python", "SQL"],
-  language: ["English", "Spanish"]
-};
-
-// Helper function to merge data with defaultData, only using defaults if data is empty or undefined
-const mergeDataWithDefaults = (data, defaultData) => {
-  const mergedData = { ...defaultData };
-
-  for (const key in data) {
-    if (Array.isArray(data[key])) {
-      // For arrays, only override if array exists and has non-empty values
-      const hasNonEmptyValues = data[key].some(item => item !== '' && item !== undefined);
-      if (data[key].length > 0 && hasNonEmptyValues) {
+const ModernTemplate = ({ data = {}, fontStyles, isModalView,defaultData }) => {
+  const mergeDataWithDefaults = (data, defaultData) => {
+    const mergedData = { ...defaultData };
+    for (const key in data) {
+      if (Array.isArray(data[key])) {
+        const hasNonEmptyValues = data[key].some(item => item !== '' && item !== undefined);
+        if (data[key].length > 0 && hasNonEmptyValues) {
+          mergedData[key] = data[key];
+        }
+      } else if (data[key] !== undefined && data[key] !== '') {
         mergedData[key] = data[key];
       }
-    } else if (data[key] !== undefined && data[key] !== '') {
-      // For non-arrays, override if value exists and is not empty
-      mergedData[key] = data[key];
     }
-  }
-
-  return mergedData;
-};
-
-const ModernTemplate = ({ data = {}, fontStyles, isModalView }) => {
-  // Merge user-provided data with defaultData, ensuring defaults are only used when data is empty
+    return mergedData;
+  };
   const mergedData = mergeDataWithDefaults(data, defaultData);
-
   return (
       <div>
         {/* Main Template */}
@@ -78,7 +24,6 @@ const ModernTemplate = ({ data = {}, fontStyles, isModalView }) => {
               fontWeight: fontStyles.is_font_bold ? "bold" : "normal",
               fontStyle: fontStyles.is_font_italic ? "italic" : "normal",
               padding: "10px",
-              //width: '210mm',
               minHeight: '250mm',
             }}
         >

@@ -227,6 +227,9 @@ export default function Builder() {
                                             <SelectValue placeholder="Select template" />
                                         </SelectTrigger>
                                         <SelectContent>
+                                            <SelectItem key={`modern`} value={`modern`}>
+                                                Demomodern
+                                            </SelectItem>
                                             {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
                                                 <SelectItem key={num} value={`demo${num}`}>
                                                     Demo {num}

@@ -20,7 +20,8 @@ export function AuthProvider({children}) {
             const storedToken = localStorage.getItem('token')
             if (!storedToken) {
                 // No token anywhere - redirect to main site
-                router.push('/login')
+               // router.push('/login')
+               console.log("hello")
             } else {
                 // Has stored token - stay on current page
                 const storedUser = JSON.parse(localStorage.getItem('userData'))

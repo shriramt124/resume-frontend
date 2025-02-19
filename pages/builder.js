@@ -42,6 +42,8 @@ export default function Builder() {
         }));
     };
     useEffect(() => {
+        // Commented out API-related code for development
+        /*
         const token = localStorage.getItem('token');
         if (!token) {
             router.push('/login');
@@ -51,6 +53,28 @@ export default function Builder() {
         const loginUserData = JSON.parse(localStorage.getItem('userData') || '{}');
         setUserData(loginUserData);
         setProfileData(userData);
+        */
+        // Sample placeholder data
+        const sampleUserData = {
+            id: 1,
+            name: 'John Doe',
+            email: 'john@example.com'
+        };
+
+        const sampleProfileData = {
+            id: 1,
+            first_name: 'John',
+            last_name: 'Doe',
+            email: 'john@example.com',
+            phone: '+1234567890',
+            occupation: 'Software Developer',
+            city: 'New York',
+            country: 'USA',
+            professional_summary: 'Experienced software developer with expertise in web technologies'
+        };
+
+        setUserData(sampleUserData);
+        setProfileData(sampleProfileData);
     }, [router]);
 
     useEffect(() => {

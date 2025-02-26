@@ -34,11 +34,11 @@ const Skills = ({ formData, updateFormData }) => {
                             {
                                 role: "system",
                                 content: `Provide a list of technical skills related to: ${searchTerm}. 
-                                Format the response as a comma-separated list. Do not include numbers or bullet points.`,
+                                Format the response as a comma-separated list and include search title also. Do not include numbers or bullet points.`,
                             },
                             {
                                 role: "user",
-                                content: `List technical skills related to: ${searchTerm}. 
+                                content: `List technical skills related to: ${searchTerm}  and include search title also. 
                                 Provide only a comma-separated list of skills.`,
                             },
                         ],

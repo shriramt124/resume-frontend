@@ -1,11 +1,4 @@
-import React from 'react';
-
-const ExecutiveTemplate = ({
-                               data = {},
-                               fontStyles = {},
-                               defaultData = {},
-                               isModalView = false,
-                           }) => {
+const ExecutiveTemplate = ({ data = {}, fontStyles, isModalView, defaultData }) => {
     const mergeDataWithDefaults = (data, defaultData) => {
         const mergedData = { ...defaultData };
         for (const key in data) {
@@ -23,264 +16,321 @@ const ExecutiveTemplate = ({
 
     const mergedData = mergeDataWithDefaults(data, defaultData);
 
-    const cssVariables = {
-        '--primary': data.primary_color || '#2b3a55',
-        '--accent': data.accent_color || '#ce5a67',
-        '--gold': data.highlight_color || '#c5a572',
-        '--light': data.bg_light_color || '#f8f9fa',
-        '--dark': data.text_color || '#1a1a1a',
-        '--border': data.border_color || '#e5e7eb',
-    };
+    // Primary and secondary colors
+    const primaryColor = fontStyles.font_color || "#1E3A8A"; // Default to a strong blue
+    const secondaryColor = "#64748B"; // Slate-500
 
     return (
-        <div className="w-full bg-white p-1" style={{
-            ...cssVariables,
-            fontFamily: data.font_family || "'Playfair Display', Georgia, serif",
-            fontWeight: data.is_font_bold ? 'bold' : 'normal',
-            fontStyle: data.is_font_italic ? 'italic' : 'normal',
-            color: 'var(--dark)',
-        }}>
-            {/* Header Section */}
-            <header className="relative mb-8 pb-5 border-b-2" style={{ borderColor: 'var(--gold)' }}>
-                <div className="relative z-10">
-                    <h1 className="text-5xl font-bold mb-2 tracking-tight" style={{ color: 'var(--primary)' }}>
-                        {`${mergedData.first_name || 'John'} ${mergedData.last_name || 'Doe'}`}
-                    </h1>
-                    <p className="text-2xl italic mb-5" style={{ color: 'var(--accent)' }}>
-                        {mergedData.occupation || 'Executive Professional'}
-                    </p>
-                    <div className="mt-5 table w-full border-separate" style={{ borderSpacing: '15px' }}>
-                        <div className="table-row">
-              <span className="table-cell text-center p-1 font-sans text-sm">
-                {mergedData.email || 'email@example.com'}
-              </span>
-                            <span className="table-cell text-center p-1 font-sans text-sm">
-                {mergedData.phone || '(555) 123-4567'}
-              </span>
-                            <span className="table-cell text-center p-1 font-sans text-sm">
-                {`${mergedData.city || 'City'}${mergedData.country ? ', ' + mergedData.country : ''}`}
-              </span>
+        <div className="bg-white">
+            <div
+                style={{
+                    fontFamily: fontStyles.font_family,
+                    color: "#334155", // Slate-700
+                    fontWeight: fontStyles.is_font_bold ? "bold" : "normal",
+                    fontStyle: fontStyles.is_font_italic ? "italic" : "normal",
+                    minHeight: '250mm',
+                }}
+            >
+                {/* Header with bold styling and horizontal rule */}
+                <div
+                    className="px-8 py-6 border-b-2"
+                    style={{ borderColor: primaryColor }}
+                >
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end">
+                        <div>
+                            <h1
+                                className={`${isModalView ? 'text-4xl' : 'text-3xl'} font-bold mb-2`}
+                                style={{ color: primaryColor }}
+                            >
+                                {`${mergedData.first_name} ${mergedData.last_name}`}
+                            </h1>
+                            <p className={`${isModalView ? 'text-xl' : 'text-lg'} font-semibold`}>
+                                {mergedData.occupation}
+                            </p>
+                        </div>
+
+                        <div className="mt-4 md:mt-0 text-right">
+                            <div className="text-sm">
+                                <p className="mb-1">{mergedData.email}</p>
+                                <p className="mb-1">{mergedData.phone}</p>
+                                <p>{`${mergedData.city}, ${mergedData.country}`}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div className="absolute top-[-20px] right-[-20px] w-[150px] h-[150px] opacity-10"
-                     style={{
-                         background: 'var(--primary)',
-                         clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)'
-                     }} />
-            </header>
 
-            {/* Main Content */}
-            <div className="table w-full border-separate" style={{ borderSpacing: '30px' }}>
-                {/* Left Column */}
-                <div className="table-cell w-[65%] align-top">
-                    {/* Professional Summary */}
-                    {mergedData.professional_description && (
-                        <section className="mb-10 break-inside-avoid">
-                            <h2 className="text-3xl mb-4 pb-2 relative" style={{ color: 'var(--primary)' }}>
-                                Executive Profile
-                                <span className="absolute bottom-0 left-0 w-[60px] h-[3px]"
-                                      style={{ background: 'var(--accent)' }} />
+                {/* Two-column main content */}
+                <div className="flex flex-col md:flex-row">
+                    {/* Left column - smaller width */}
+                    <div className="md:w-1/3 p-6 md:p-8">
+                        {/* Professional Summary */}
+                        <div className="mb-8">
+                            <h2
+                                className={`${isModalView ? 'text-lg' : 'text-base'} font-bold mb-4 flex items-center`}
+                                style={{ color: primaryColor }}
+                            >
+                <span
+                    className="inline-block w-4 h-4 mr-2"
+                    style={{ backgroundColor: primaryColor }}
+                ></span>
+                                EXECUTIVE SUMMARY
                             </h2>
-                            <div dangerouslySetInnerHTML={{ __html: mergedData.professional_description }} />
-                        </section>
-                    )}
 
-                    {/* Experience Section */}
-                    {mergedData.job_title?.length > 0 && (
-                        <section className="mb-10 break-inside-avoid">
-                            <h2 className="text-3xl mb-4 pb-2 relative" style={{ color: 'var(--primary)' }}>
-                                Leadership Experience
-                                <span className="absolute bottom-0 left-0 w-[60px] h-[3px]"
-                                      style={{ background: 'var(--accent)' }} />
-                            </h2>
-                            {mergedData.job_title.map((title, index) => (
-                                title && (
-                                    <div key={index} className="mb-5 pl-6 relative">
-                                        <div className="absolute left-0 top-2 w-2 h-2 rounded-full"
-                                             style={{ background: 'var(--gold)' }} />
-                                        <h3 className="text-xl font-bold mb-1" style={{ color: 'var(--primary)' }}>
-                                            {title}
-                                        </h3>
-                                        <p className="text-lg mb-2" style={{ color: 'var(--accent)' }}>
-                                            {mergedData.employer?.[index] || ''}
-                                        </p>
-                                        <p className="font-sans text-sm mb-4">
-                                            {`${mergedData.job_begin?.[index] || ''} - ${mergedData.job_end?.[index] || 'Present'}`}
-                                        </p>
-                                        {mergedData.job_description?.[index] && (
-                                            <div className="p-5 mb-2 border-l-3 shadow-sm bg-white"
-                                                 style={{ borderLeftColor: 'var(--gold)' }}>
-                                                <div dangerouslySetInnerHTML={{ __html: mergedData.job_description[index] }} />
-                                            </div>
-                                        )}
-                                    </div>
-                                )
-                            ))}
-                        </section>
-                    )}
+                            <div
+                                dangerouslySetInnerHTML={{ __html: mergedData.professional_description }}
+                                className="prose max-w-none text-sm"
+                            />
+                        </div>
 
-                    {/* Internships Section */}
-                    {mergedData.internship_title?.length > 0 && mergedData.internship_title[0] && (
-                        <section className="mb-10 break-inside-avoid">
-                            <h2 className="text-3xl mb-4 pb-2 relative" style={{ color: 'var(--primary)' }}>
-                                Internship Experience
-                                <span className="absolute bottom-0 left-0 w-[60px] h-[3px]"
-                                      style={{ background: 'var(--accent)' }} />
+                        {/* Skills Section */}
+                        <div className="mb-8">
+                            <h2
+                                className={`${isModalView ? 'text-lg' : 'text-base'} font-bold mb-4 flex items-center`}
+                                style={{ color: primaryColor }}
+                            >
+                <span
+                    className="inline-block w-4 h-4 mr-2"
+                    style={{ backgroundColor: primaryColor }}
+                ></span>
+                                CORE COMPETENCIES
                             </h2>
-                            {mergedData.internship_title.map((title, index) => (
-                                title && (
-                                    <div key={index} className="mb-5 pl-6 relative">
-                                        <div className="absolute left-0 top-2 w-2 h-2 rounded-full"
-                                             style={{ background: 'var(--gold)' }} />
-                                        <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--primary)' }}>
-                                            {title}
-                                        </h3>
-                                        {mergedData.internship_summary?.[index] && (
-                                            <div className="p-5 mb-2 border-l-3 shadow-sm bg-white"
-                                                 style={{ borderLeftColor: 'var(--gold)' }}>
-                                                <div dangerouslySetInnerHTML={{ __html: mergedData.internship_summary[index] }} />
-                                            </div>
-                                        )}
-                                    </div>
-                                )
-                            ))}
-                        </section>
-                    )}
 
-                    {/* Certificates Section */}
-                    {mergedData.certificate_title?.length > 0 && (
-                        <section className="mb-10 break-inside-avoid">
-                            <h2 className="text-3xl mb-4 pb-2 relative" style={{ color: 'var(--primary)' }}>
-                                Certifications
-                                <span className="absolute bottom-0 left-0 w-[60px] h-[3px]"
-                                      style={{ background: 'var(--accent)' }} />
-                            </h2>
-                            {mergedData.certificate_title.map((title, index) => (
-                                <div key={index} className="mb-5 pl-6 relative">
-                                    <div className="absolute left-0 top-2 w-2 h-2 rounded-full"
-                                         style={{ background: 'var(--gold)' }} />
-                                    <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--primary)' }}>
-                                        {title}
-                                    </h3>
-                                    {mergedData.certificate_description?.[index] && (
-                                        <div className="p-5 mb-2 border-l-3 shadow-sm bg-white"
-                                             style={{ borderLeftColor: 'var(--gold)' }}>
-                                            <div dangerouslySetInnerHTML={{ __html: mergedData.certificate_description[index] }} />
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </section>
-                    )}
-                </div>
-
-                {/* Sidebar */}
-                <div className="table-cell w-[35%] align-top p-2 border-l-2"
-                     style={{ background: 'var(--light)', borderColor: 'var(--gold)' }}>
-                    {/* Skills Section */}
-                    {mergedData.skill?.length > 0 && (
-                        <section className="mb-10 break-inside-avoid">
-                            <h2 className="text-3xl mb-4 pb-2 relative" style={{ color: 'var(--primary)' }}>
-                                Expertise
-                                <span className="absolute bottom-0 left-0 w-[60px] h-[3px]"
-                                      style={{ background: 'var(--accent)' }} />
-                            </h2>
-                            <div className="mb-6">
-                                <h3 className="text-lg font-bold mb-4" style={{ color: 'var(--accent)' }}>
-                                    Professional Skills
-                                </h3>
-                                {mergedData.skill.map((skill, index) => (
-                                    <div key={index} className="mb-2 pl-5 relative font-sans">
-                                        <span className="absolute left-0 text-lg" style={{ color: 'var(--gold)' }}>•</span>
-                                        {skill}
+                            <div className="space-y-2">
+                                {mergedData.skill && mergedData.skill.map((skill, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex items-baseline"
+                                    >
+                    <span
+                        className="text-xs mr-2"
+                        style={{ color: primaryColor }}
+                    >■</span>
+                                        <span className="text-sm">{skill}</span>
                                     </div>
                                 ))}
                             </div>
-                        </section>
-                    )}
+                        </div>
 
-                    {/* Languages Section */}
-                    {mergedData.language?.length > 0 && (
-                        <section className="mb-10 break-inside-avoid">
-                            <h2 className="text-3xl mb-4 pb-2 relative" style={{ color: 'var(--primary)' }}>
-                                Languages
-                                <span className="absolute bottom-0 left-0 w-[60px] h-[3px]"
-                                      style={{ background: 'var(--accent)' }} />
-                            </h2>
-                            <div className="mb-6">
-                                {mergedData.language.map((language, index) => (
-                                    <div key={index} className="mb-2 pl-5 relative font-sans">
-                                        <span className="absolute left-0 text-lg" style={{ color: 'var(--gold)' }}>•</span>
-                                        {language}
-                                    </div>
-                                ))}
-                            </div>
-                        </section>
-                    )}
-
-                    {/* Education Section */}
-                    {mergedData.college?.length > 0 && mergedData.college[0] && (
-                        <section className="mb-10 break-inside-avoid">
-                            <h2 className="text-3xl mb-4 pb-2 relative" style={{ color: 'var(--primary)' }}>
-                                Education
-                                <span className="absolute bottom-0 left-0 w-[60px] h-[3px]"
-                                      style={{ background: 'var(--accent)' }} />
-                            </h2>
-                            {mergedData.college.map((college, index) => (
-                                <div key={index} className="mb-5 pl-6 relative">
-                                    <div className="absolute left-0 top-2 w-2 h-2 rounded-full"
-                                         style={{ background: 'var(--gold)' }} />
-                                    <h3 className="text-xl font-bold mb-1" style={{ color: 'var(--primary)' }}>
-                                        {mergedData.degree?.[index] || ''}
-                                    </h3>
-                                    <p className="text-lg mb-2" style={{ color: 'var(--accent)' }}>{college}</p>
-                                    <p className="font-sans text-sm mb-2">
-                                        {`${mergedData.college_begin?.[index] || ''} - ${mergedData.college_end?.[index] || ''}`}
-                                    </p>
-                                    {mergedData.college_description?.[index] && (
-                                        <div dangerouslySetInnerHTML={{ __html: mergedData.college_description[index] }} />
-                                    )}
-                                </div>
-                            ))}
-                        </section>
-                    )}
-
-                    {/* Other Sections */}
-                    {mergedData.other_title?.map((title, index) => (
-                        title && (
-                            <section key={index} className="mb-10 break-inside-avoid">
-                                <h2 className="text-3xl mb-4 pb-2 relative" style={{ color: 'var(--primary)' }}>
-                                    {title}
-                                    <span className="absolute bottom-0 left-0 w-[60px] h-[3px]"
-                                          style={{ background: 'var(--accent)' }} />
+                        {/* Languages */}
+                        {mergedData.language && mergedData.language.length > 0 && (
+                            <div className="mb-8">
+                                <h2
+                                    className={`${isModalView ? 'text-lg' : 'text-base'} font-bold mb-4 flex items-center`}
+                                    style={{ color: primaryColor }}
+                                >
+                  <span
+                      className="inline-block w-4 h-4 mr-2"
+                      style={{ backgroundColor: primaryColor }}
+                  ></span>
+                                    LANGUAGES
                                 </h2>
-                                <div className="mb-6">
-                                    {mergedData.other_description?.[index] && (
-                                        <div dangerouslySetInnerHTML={{ __html: mergedData.other_description[index] }} />
-                                    )}
+
+                                <div className="space-y-2">
+                                    {mergedData.language.map((language, index) => (
+                                        <div
+                                            key={index}
+                                            className="flex items-baseline"
+                                        >
+                      <span
+                          className="text-xs mr-2"
+                          style={{ color: primaryColor }}
+                      >■</span>
+                                            <span className="text-sm">{language}</span>
+                                        </div>
+                                    ))}
                                 </div>
-                            </section>
-                        )
-                    ))}
+                            </div>
+                        )}
+
+                        {/* Certificates */}
+                        {mergedData.certificate_title && mergedData.certificate_title.length > 0 && (
+                            <div className="mb-8">
+                                <h2
+                                    className={`${isModalView ? 'text-lg' : 'text-base'} font-bold mb-4 flex items-center`}
+                                    style={{ color: primaryColor }}
+                                >
+                  <span
+                      className="inline-block w-4 h-4 mr-2"
+                      style={{ backgroundColor: primaryColor }}
+                  ></span>
+                                    CERTIFICATIONS
+                                </h2>
+
+                                <div className="space-y-3">
+                                    {mergedData.certificate_title.map((title, index) => (
+                                        <div key={index} className="mb-2">
+                                            <div className="font-medium text-sm mb-1">{title}</div>
+                                            <div
+                                                dangerouslySetInnerHTML={{ __html: mergedData.certificate_description[index] }}
+                                                className="prose max-w-none text-xs"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Right column - larger width */}
+                    <div className="md:w-2/3 p-6 md:p-8 md:border-l" style={{ borderColor: `${primaryColor}40` }}>
+                        {/* Experience */}
+                        <div className="mb-10">
+                            <h2
+                                className={`${isModalView ? 'text-lg' : 'text-base'} font-bold mb-6 flex items-center`}
+                                style={{ color: primaryColor }}
+                            >
+                <span
+                    className="inline-block w-4 h-4 mr-2"
+                    style={{ backgroundColor: primaryColor }}
+                ></span>
+                                PROFESSIONAL EXPERIENCE
+                            </h2>
+
+                            {mergedData.job_title && mergedData.job_title.map((title, index) => (
+                                <div key={index} className="mb-8">
+                                    <div
+                                        className="border-l-4 pl-4 pb-1 mb-4"
+                                        style={{ borderColor: primaryColor }}
+                                    >
+                                        <div className="flex justify-between items-start mb-2">
+                                            <div>
+                                                <h3
+                                                    className={`${isModalView ? 'text-lg' : 'text-base'} font-bold`}
+                                                    style={{ color: primaryColor }}
+                                                >
+                                                    {title}
+                                                </h3>
+                                                <p className="font-medium">{mergedData.employer[index]}</p>
+                                            </div>
+                                            <p
+                                                className="text-xs font-semibold px-2 py-1 rounded ml-2 whitespace-nowrap"
+                                                style={{
+                                                    backgroundColor: `${primaryColor}10`,
+                                                    color: primaryColor
+                                                }}
+                                            >
+                                                {`${mergedData.job_begin[index]} - ${mergedData.job_end[index]}`}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        dangerouslySetInnerHTML={{ __html: mergedData.job_description[index] }}
+                                        className="prose max-w-none pl-4"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Education */}
+                        <div className="mb-10">
+                            <h2
+                                className={`${isModalView ? 'text-lg' : 'text-base'} font-bold mb-6 flex items-center`}
+                                style={{ color: primaryColor }}
+                            >
+                <span
+                    className="inline-block w-4 h-4 mr-2"
+                    style={{ backgroundColor: primaryColor }}
+                ></span>
+                                EDUCATION
+                            </h2>
+
+                            <div className="space-y-6">
+                                {mergedData.college && mergedData.college.map((college, index) => (
+                                    <div
+                                        key={index}
+                                        className="mb-4 border-l-4 pl-4 pb-1"
+                                        style={{ borderColor: primaryColor }}
+                                    >
+                                        <div className="flex justify-between items-start mb-2">
+                                            <div>
+                                                <h3
+                                                    className={`${isModalView ? 'text-lg' : 'text-base'} font-bold`}
+                                                    style={{ color: primaryColor }}
+                                                >
+                                                    {mergedData.degree[index]}
+                                                </h3>
+                                                <p className="font-medium">{college}</p>
+                                            </div>
+                                            <p
+                                                className="text-xs font-semibold px-2 py-1 rounded ml-2 whitespace-nowrap"
+                                                style={{
+                                                    backgroundColor: `${primaryColor}10`,
+                                                    color: primaryColor
+                                                }}
+                                            >
+                                                {`${mergedData.college_begin[index]} - ${mergedData.college_end[index]}`}
+                                            </p>
+                                        </div>
+                                        <div
+                                            dangerouslySetInnerHTML={{ __html: mergedData.college_description[index] }}
+                                            className="prose max-w-none mt-2"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Internships */}
+                        {mergedData.internship_title && mergedData.internship_title.length > 0 && (
+                            <div className="mb-10">
+                                <h2
+                                    className={`${isModalView ? 'text-lg' : 'text-base'} font-bold mb-6 flex items-center`}
+                                    style={{ color: primaryColor }}
+                                >
+                  <span
+                      className="inline-block w-4 h-4 mr-2"
+                      style={{ backgroundColor: primaryColor }}
+                  ></span>
+                                    INTERNSHIP EXPERIENCE
+                                </h2>
+
+                                <div className="space-y-5">
+                                    {mergedData.internship_title.map((title, index) => (
+                                        <div
+                                            key={index}
+                                            className="mb-4 border-l-4 pl-4 pb-1"
+                                            style={{ borderColor: primaryColor }}
+                                        >
+                                            <h3
+                                                className={`font-bold mb-2`}
+                                                style={{ color: primaryColor }}
+                                            >
+                                                {title}
+                                            </h3>
+                                            <div
+                                                dangerouslySetInnerHTML={{ __html: mergedData.internship_summary[index] }}
+                                                className="prose max-w-none"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Other Sections */}
+                        {mergedData.other_title && mergedData.other_title.map((title, index) => (
+                            <div key={index} className="mb-10">
+                                <h2
+                                    className={`${isModalView ? 'text-lg' : 'text-base'} font-bold mb-6 flex items-center`}
+                                    style={{ color: primaryColor }}
+                                >
+                  <span
+                      className="inline-block w-4 h-4 mr-2"
+                      style={{ backgroundColor: primaryColor }}
+                  ></span>
+                                    {title.toUpperCase()}
+                                </h2>
+
+                                <div
+                                    dangerouslySetInnerHTML={{ __html: mergedData.other_description[index] }}
+                                    className="prose max-w-none pl-4"
+                                />
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
-
-            <style jsx>{`
-        @media print {
-          @page {
-            size: A4;
-            margin: 0;
-          }
-          body {
-            margin: 0;
-            padding: 15mm;
-          }
-          section {
-            break-inside: avoid;
-          }
-        }
-      `}</style>
         </div>
     );
 };

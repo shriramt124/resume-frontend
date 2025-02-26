@@ -237,22 +237,6 @@ const CorporateTemplate = ({
                     </section>
                 )
             ))}
-
-            <style jsx>{`
-                @media print {
-                    @page {
-                        size: A4;
-                        margin: 0;
-                    }
-                    body {
-                        margin: 0;
-                        padding: 20mm;
-                    }
-                    section {
-                        break-inside: avoid;
-                    }
-                }
-            `}</style>
         </div>
     );
 };

@@ -16,12 +16,9 @@ const Resumes = () => {
     const fetchProfiles = async () => {
         setIsLoading(true);
         try {
+            // Commented out API call for development
+            /*
             const token = localStorage.getItem('token');
-            if (!token) {
-                router.push('/login');
-                return;
-            }
-
             const response = await fetch(`${process.env.NEXT_PUBLIC_WEB_URL}/api/get-resume`, {
                 method: 'POST',
                 headers: {
@@ -36,6 +33,37 @@ const Resumes = () => {
             if (data && Array.isArray(data.data)) {
                 setProfiles(data.data);
             }
+            */
+
+            // Sample placeholder data
+            const sampleProfiles = [
+                {
+                    id: 1,
+                    first_name: 'John',
+                    last_name: 'Doe',
+                    job_title: 'Frontend Developer',
+                    template_id: 'modern',
+                    updated_at: '2024-01-15T10:00:00Z'
+                },
+                {
+                    id: 2,
+                    first_name: 'Jane',
+                    last_name: 'Smith',
+                    job_title: 'UX Designer',
+                    template_id: 'professional',
+                    updated_at: '2024-01-14T15:30:00Z'
+                },
+                {
+                    id: 3,
+                    first_name: 'Mike',
+                    last_name: 'Johnson',
+                    job_title: 'Full Stack Developer',
+                    template_id: 'creative',
+                    updated_at: '2024-01-13T09:45:00Z'
+                }
+            ];
+
+            setProfiles(sampleProfiles);
         } catch (error) {
             console.error('Error fetching profiles:', error);
             setProfiles([]);

@@ -23,10 +23,10 @@ const ProfilePage = () => {
     useEffect(() => {
         setIsClient(true);
         const token = localStorage.getItem('token');
-        if (!token) {
-            router.push('/login');
-            return;
-        }
+        // if (!token) {
+        //     router.push('/login');
+        //     return;
+        // }
 
         const userData = JSON.parse(localStorage.getItem('userData') || '{}');
         setProfileData({

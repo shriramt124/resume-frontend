@@ -259,21 +259,21 @@ export default function Builder() {
                                 </button>
 
                                 <div className="flex items-center gap-2">
-                                    <Select
-                                        value={selectedTemplate}
-                                        onValueChange={setSelectedTemplate}
-                                    >
-                                        <SelectTrigger className="w-[130px] h-[40px] border-gray-200">
-                                            <SelectValue placeholder="Select template" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {Array.from({ length: 15 }, (_, i) => i + 1).map((num) => (
-                                                <SelectItem key={num} value={`demo${num}`}>
-                                                    Demo {num}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
+                                    {/*<Select*/}
+                                    {/*    value={selectedTemplate}*/}
+                                    {/*    onValueChange={setSelectedTemplate}*/}
+                                    {/*>*/}
+                                    {/*    <SelectTrigger className="w-[130px] h-[40px] border-gray-200">*/}
+                                    {/*        <SelectValue placeholder="Select template" />*/}
+                                    {/*    </SelectTrigger>*/}
+                                    {/*    <SelectContent>*/}
+                                    {/*        {Array.from({ length: 15 }, (_, i) => i + 1).map((num) => (*/}
+                                    {/*            <SelectItem key={num} value={`demo${num}`}>*/}
+                                    {/*                Demo {num}*/}
+                                    {/*            </SelectItem>*/}
+                                    {/*        ))}*/}
+                                    {/*    </SelectContent>*/}
+                                    {/*</Select>*/}
 
                                     <button
                                         onClick={() => setShowDownloadSection(true)}

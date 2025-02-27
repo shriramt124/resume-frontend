@@ -34,6 +34,7 @@ export default function Builder() {
     });
     const [selectedTemplate, setSelectedTemplate] = useState(formData?.templateName || 'modern');
     const router = useRouter();
+
     const handleTemplateChange = (template) => {
         setSelectedTemplate(template);
         setFormData(prev => ({
@@ -41,6 +42,16 @@ export default function Builder() {
             templateName: template
         }));
     };
+    useEffect(() => {
+        // This will run when the component mounts and when the router query changes
+        if (router.isReady && router.query.templateId) {
+            const template = router.query.templateId;
+            if (template !== selectedTemplate) {
+                setSelectedTemplate(template);
+            }
+        }
+    }, [router.isReady, router.query, selectedTemplate]); // Don't include formData here
+
     const defaultData = {
         first_name: "John",
         last_name: "Doe",

@@ -1,24 +1,36 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { X, Palette, Eye, Download, Layout } from 'lucide-react';
 import { templates } from "@/lib/constants/templates";
 import TemplateSelector from "@/components/TemplateSelector";
 import SidebarControls from "@/components/SidebarControls";
 import DownloadSection from "@/components/DownloadSection";
+import {useRouter} from "next/router";
 
-const ResumeModal = ({ isOpen, onRequestClose, formData, fontStyles: initialFontStyles,onTemplateChange,defaultData }) => {
-    const [selectedTemplate, setSelectedTemplate] = useState(formData?.templateName || 'modern');
+const ResumeModal = ({
+                         isOpen,
+                         onRequestClose,
+                         formData,
+                         fontStyles: initialFontStyles,
+                         onTemplateChange,
+                         selectedTemplate: parentSelectedTemplate,
+                         defaultData
+                     }) => {
     const [fontStyles, setFontStyles] = useState(initialFontStyles);
     const [mobileView, setMobileView] = useState('preview');
+    const router = useRouter();
+
     if (!isOpen) return null;
 
-    const TemplateComponent = templates?.[selectedTemplate] || templates?.modern;
+    // Use the parent's selectedTemplate prop directly
+    const TemplateComponent = templates?.[parentSelectedTemplate] || templates?.modern;
     if (!TemplateComponent) return null;
+
     const handleTemplateChange = (template) => {
-        setSelectedTemplate(template);
         if (onTemplateChange) {
             onTemplateChange(template);
         }
     };
+
     const PreviewContent = () => {
         return (
             <div className="h-full flex flex-col bg-gray-50">
@@ -92,7 +104,7 @@ const ResumeModal = ({ isOpen, onRequestClose, formData, fontStyles: initialFont
                                 />
                             ) : (
                                 <TemplateSelector
-                                    selectedTemplate={selectedTemplate}
+                                    selectedTemplate={parentSelectedTemplate}
                                     setSelectedTemplate={handleTemplateChange}
                                 />
                             )}
@@ -137,9 +149,9 @@ const ResumeModal = ({ isOpen, onRequestClose, formData, fontStyles: initialFont
                                 )}
                                 {mobileView === 'templates' && (
                                     <TemplateSelector
-                                        selectedTemplate={selectedTemplate}
+                                        selectedTemplate={parentSelectedTemplate}
                                         setSelectedTemplate={(template) => {
-                                            setSelectedTemplate(template);
+                                            handleTemplateChange(template);
                                             setMobileView('preview');
                                         }}
                                     />
@@ -148,7 +160,7 @@ const ResumeModal = ({ isOpen, onRequestClose, formData, fontStyles: initialFont
                                     <DownloadSection
                                         formData={formData}
                                         fontStyles={fontStyles}
-                                        templateName={selectedTemplate}
+                                        templateName={parentSelectedTemplate}
                                     />
                                 )}
                             </div>

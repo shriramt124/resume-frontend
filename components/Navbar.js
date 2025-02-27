@@ -130,12 +130,12 @@ const Navbar = () => {
     );
 
     const DesktopResumeList = () => (
-        <div className="bg-gray-50 py-2">
+        <div className="bg-gray-50 py-2 h-full flex flex-col">
             {isLoading ? (
                 <div className="px-4 py-2 text-sm text-gray-500">Loading...</div>
             ) : profiles.length > 0 ? (
                 <>
-                    <div className="flex items-center justify-between px-6 py-2 border-b border-gray-200">
+                    <div className="flex items-center justify-between px-6 py-2 border-b border-gray-200 sticky top-0 bg-gray-50 z-10">
                         <h3 className="text-sm font-medium text-gray-900">Your Resumes</h3>
                         <Link
                             href="/resumes"
@@ -145,9 +145,11 @@ const Navbar = () => {
                             <ExternalLink className="ml-1 h-4 w-4" />
                         </Link>
                     </div>
-                    {profiles.map((profile) => (
-                        <ResumeItem key={profile.id} profile={profile} />
-                    ))}
+                    <div className="overflow-y-auto max-h-[calc(100vh-200px)] scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+                        {profiles.map((profile) => (
+                            <ResumeItem key={profile.id} profile={profile} />
+                        ))}
+                    </div>
                 </>
             ) : (
                 <div className="px-6 py-2 text-sm text-gray-500">No resumes found</div>
@@ -155,12 +157,12 @@ const Navbar = () => {
         </div>
     );
     const MobileResumeList = () => (
-        <div className="pl-5 space-y-1">
+        <div className="pl-5 space-y-1 h-full flex flex-col">
             {isLoading ? (
                 <div className="px-3 py-2 text-sm text-gray-500">Loading...</div>
             ) : profiles.length > 0 ? (
                 <>
-                    <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200">
+                    <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 sticky top-0 bg-white z-10">
                         <h3 className="text-sm font-medium text-gray-900">Your Resumes</h3>
                         <Link
                             href="/resumes"
@@ -170,9 +172,11 @@ const Navbar = () => {
                             <ExternalLink className="ml-1 h-4 w-4" />
                         </Link>
                     </div>
-                    {profiles.map((profile) => (
-                        <ResumeItem key={profile.id} profile={profile} isMobile={true} />
-                    ))}
+                    <div className="overflow-y-auto max-h-[calc(100vh-180px)] scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+                        {profiles.map((profile) => (
+                            <ResumeItem key={profile.id} profile={profile} isMobile={true} />
+                        ))}
+                    </div>
                 </>
             ) : (
                 <div className="px-3 py-2 text-sm text-gray-500">No resumes found</div>

@@ -41,6 +41,46 @@ export default function Builder() {
             templateName: template
         }));
     };
+    const defaultData = {
+        first_name: "John",
+        last_name: "Doe",
+        occupation: "Software Engineer",
+        email: "john.doe@example.com",
+        phone: "+1 234 567 890",
+        city: "New York",
+        country: "USA",
+        professional_description: "<p>Experienced software engineer with a passion for building scalable and efficient web applications. Proficient in JavaScript, React, and Node.js.</p>",
+        job_title: ["Senior Software Engineer", "Software Engineer"],
+        employer: ["Tech Corp", "Innovate Inc"],
+        job_begin: ["2018", "2015"],
+        job_end: ["Present", "2018"],
+        job_description: [
+            "<p>Led a team of developers to build a scalable e-commerce platform.</p>",
+            "<p>Developed and maintained web applications using React and Node.js.</p>"
+        ],
+        college: ["University of Tech", "State College"],
+        degree: ["Bachelor of Science in Computer Science", "Associate Degree in IT"],
+        college_begin: ["2011", "2009"],
+        college_end: ["2015", "2011"],
+        college_description: [
+            "<p>Graduated with honors, focusing on software development and algorithms.</p>",
+            "<p>Completed foundational courses in programming and systems design.</p>"
+        ],
+        internship_title: ["Software Development Intern"],
+        internship_summary: [
+            "<p>Assisted in the development of a mobile application using Flutter.</p>"
+        ],
+        certificate_title: ["Certified JavaScript Developer"],
+        certificate_description: [
+            "<p>Completed advanced JavaScript courses and passed the certification exam.</p>"
+        ],
+        other_title: ["Volunteer Work"],
+        other_description: [
+            "<p>Volunteered as a mentor for coding bootcamps, helping students learn programming basics.</p>"
+        ],
+        skill: ["JavaScript", "React", "Node.js", "Python", "SQL"],
+        language: ["English", "Spanish"]
+    };
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -283,6 +323,7 @@ export default function Builder() {
                     onRequestClose={() => setIsModalOpen(false)}
                     formData={formData}
                     fontStyles={fontStyles}
+                    defaultData={defaultData}
                     onTemplateChange={handleTemplateChange}
                     selectedTemplate={selectedTemplate}
                     onDownload={() => {

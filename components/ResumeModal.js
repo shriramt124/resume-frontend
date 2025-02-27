@@ -5,11 +5,12 @@ import TemplateSelector from "@/components/TemplateSelector";
 import SidebarControls from "@/components/SidebarControls";
 import DownloadSection from "@/components/DownloadSection";
 
-const ResumeModal = ({ isOpen, onRequestClose, formData, fontStyles: initialFontStyles,onTemplateChange }) => {
+const ResumeModal = ({ isOpen, onRequestClose, formData, fontStyles: initialFontStyles,onTemplateChange,defaultData }) => {
     const [selectedTemplate, setSelectedTemplate] = useState(formData?.templateName || 'modern');
     const [fontStyles, setFontStyles] = useState(initialFontStyles);
     const [mobileView, setMobileView] = useState('preview');
-
+    console.log('defaultData')
+    console.log(defaultData)
     if (!isOpen) return null;
 
     const TemplateComponent = templates?.[selectedTemplate] || templates?.modern;
@@ -45,6 +46,7 @@ const ResumeModal = ({ isOpen, onRequestClose, formData, fontStyles: initialFont
                                         data={formData}
                                         fontStyles={fontStyles}
                                         isModalView={true}
+                                        defaultData={defaultData}
                                     />
                                 </div>
                             </div>

@@ -259,22 +259,6 @@ export default function Builder() {
                                 </button>
 
                                 <div className="flex items-center gap-2">
-                                    {/*<Select*/}
-                                    {/*    value={selectedTemplate}*/}
-                                    {/*    onValueChange={setSelectedTemplate}*/}
-                                    {/*>*/}
-                                    {/*    <SelectTrigger className="w-[130px] h-[40px] border-gray-200">*/}
-                                    {/*        <SelectValue placeholder="Select template" />*/}
-                                    {/*    </SelectTrigger>*/}
-                                    {/*    <SelectContent>*/}
-                                    {/*        {Array.from({ length: 15 }, (_, i) => i + 1).map((num) => (*/}
-                                    {/*            <SelectItem key={num} value={`demo${num}`}>*/}
-                                    {/*                Demo {num}*/}
-                                    {/*            </SelectItem>*/}
-                                    {/*        ))}*/}
-                                    {/*    </SelectContent>*/}
-                                    {/*</Select>*/}
-
                                     <button
                                         onClick={() => setShowDownloadSection(true)}
                                         className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors h-[40px]"
@@ -292,8 +276,67 @@ export default function Builder() {
                 <div className="max-w-6xl mx-auto px-4 mb-20">
                     <div className="w-full">
                         {formData && renderSection()}
+                        {/* Navigation Buttons */}
+                        <div className="flex justify-between mt-10 mb-8">
+                            <button
+                                onClick={() => {
+                                    if (currentSectionIndex > 0) {
+                                        setCurrentSectionIndex(currentSectionIndex - 1);
+                                        setCurrentSection(sections[currentSectionIndex - 1].id);
+                                    }
+                                }}
+                                disabled={currentSectionIndex === 0}
+                                className={`px-6 py-3 rounded-lg flex items-center gap-2 transition-all shadow-sm
+            ${currentSectionIndex === 0
+                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200'
+                                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 hover:shadow'}`}
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-5 w-5"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                >
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
+                                Previous
+                            </button>
+
+                            <button
+                                onClick={() => {
+                                    if (currentSectionIndex < sections.length - 1) {
+                                        setCurrentSectionIndex(currentSectionIndex + 1);
+                                        setCurrentSection(sections[currentSectionIndex + 1].id);
+                                    }
+                                }}
+                                disabled={currentSectionIndex === sections.length - 1}
+                                className={`px-6 py-3 rounded-lg flex items-center gap-2 transition-all
+            ${currentSectionIndex === sections.length - 1
+                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200'
+                                    : 'bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg'}`}
+                            >
+                                Next
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-5 w-5"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                >
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
+
 
                 {/* Download Section Modal */}
                 {showDownloadSection && (

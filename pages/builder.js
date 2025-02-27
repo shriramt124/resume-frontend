@@ -211,7 +211,7 @@ export default function Builder() {
     };
 
     return (
-
+        <Layout>
             <div className="min-h-screen bg-gray-50">
                 {/* Navigation Tabs */}
                 <nav className="bg-white shadow-md mb-6 sticky top-0 z-20 border-b">
@@ -231,11 +231,11 @@ export default function Builder() {
                                                 relative py-4 px-4 md:px-5 whitespace-nowrap transition-all duration-300 ease-in-out
                                                 flex items-center gap-2.5 min-w-max group
                                                 ${currentSection === section.id
-                                                    ? 'text-blue-600 font-medium'
-                                                    : index <= currentSectionIndex
-                                                        ? 'text-gray-700'
-                                                        : 'text-gray-500 hover:text-gray-700'
-                                                }
+                                                ? 'text-blue-600 font-medium'
+                                                : index <= currentSectionIndex
+                                                    ? 'text-gray-700'
+                                                    : 'text-gray-500 hover:text-gray-700'
+                                            }
                                             `}
                                         >
                                             <Icon className={`w-5 h-5 transition-transform duration-300 ${currentSection === section.id ? 'scale-110' : 'group-hover:scale-105'}`}/>
@@ -377,6 +377,6 @@ export default function Builder() {
                     }}
                 />
             </div>
-
+        </Layout>
     );
 }

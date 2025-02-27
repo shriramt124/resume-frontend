@@ -260,27 +260,6 @@ export default function Builder() {
                                     <Eye className="w-5 h-5"/>
                                     <span className="hidden md:inline font-medium">Preview</span>
                                 </button>
-
-                                <div className="flex items-center gap-3">
-                                    <Select
-                                        value={selectedTemplate}
-                                        onValueChange={setSelectedTemplate}
-                                    >
-                                        <SelectTrigger className="w-[140px] h-[42px] border-gray-200 hover:border-gray-300 transition-colors duration-200">
-                                            <SelectValue placeholder="Select template" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem key={`modern`} value={`modern`}>
-                                                Modern Template
-                                            </SelectItem>
-                                            {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
-                                                <SelectItem key={num} value={`demo${num}`}>
-                                                    Template {num}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-
                                 <div className="flex items-center gap-2">
                                     <button
                                         onClick={() => setShowDownloadSection(true)}

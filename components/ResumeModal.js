@@ -9,8 +9,6 @@ const ResumeModal = ({ isOpen, onRequestClose, formData, fontStyles: initialFont
     const [selectedTemplate, setSelectedTemplate] = useState(formData?.templateName || 'modern');
     const [fontStyles, setFontStyles] = useState(initialFontStyles);
     const [mobileView, setMobileView] = useState('preview');
-    console.log('defaultData')
-    console.log(defaultData)
     if (!isOpen) return null;
 
     const TemplateComponent = templates?.[selectedTemplate] || templates?.modern;

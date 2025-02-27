@@ -330,7 +330,7 @@ const Navbar = () => {
                             <span className={`font-bold text-xl transition-colors duration-200
                                 ${isScrolled || isOpen ? 'text-gray-800' : 'text-gray-700'}
                                 group-hover:text-blue-600`}>
-                                Resume Builder
+                                HireMeAI
                             </span>
                         </Link>
                     </div>

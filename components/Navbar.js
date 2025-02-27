@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from "react";
+import Image from 'next/image';
 import {
     Menu,
     X,
@@ -324,14 +325,14 @@ const Navbar = () => {
                     {/* Logo Section */}
                     <div className="flex items-center">
                         <Link href="/builder?templateId=modern" className="flex items-center space-x-2 group">
-                            <LayoutIcon className={`h-8 w-8 transition-colors duration-200
-                                ${isScrolled || isOpen ? 'text-blue-600' : 'text-blue-500'}`}
+                            <Image
+                                src="/logo.jpg"
+                                width={140}
+                                height={100}
+                                alt="HireMeAI Logo"
+                                className=""
                             />
-                            <span className={`font-bold text-xl transition-colors duration-200
-                                ${isScrolled || isOpen ? 'text-gray-800' : 'text-gray-700'}
-                                group-hover:text-blue-600`}>
-                                HireMeAI
-                            </span>
+
                         </Link>
                     </div>
 

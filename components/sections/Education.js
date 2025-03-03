@@ -3,9 +3,28 @@ import FormField from "@/components/FormField";
 import Editor from "react-simple-wysiwyg";
 import { ChevronDown, Trash2, Plus } from 'lucide-react';
 import SmartInputField from "@/components/SmartInputField";
+import SuggestionDropdown from "@/components/SuggestionDropdown";
 
 const Education = ({ formData, updateFormData }) => {
     const [activeIndex, setActiveIndex] = useState(0);
+
+    const handleSuggestionClick = (suggestion, index) => {
+        const currentContent = formData.college_description[index] || '';
+        const bulletPoint = `<ul><li>${suggestion}</li></ul>`;
+
+        let newContent;
+        if (!currentContent) {
+            newContent = bulletPoint;
+        } else if (currentContent.includes('</ul>')) {
+            newContent = currentContent.replace('</ul>', `<li>${suggestion}</li></ul>`);
+        } else {
+            newContent = currentContent + bulletPoint;
+        }
+
+        const newArray = [...formData.college_description];
+        newArray[index] = newContent;
+        updateFormData('college_description', newArray);
+    };
 
     useEffect(() => {
         if (!formData.college?.length) {
@@ -166,6 +185,7 @@ const Education = ({ formData, updateFormData }) => {
                                 <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
                                     <div className="flex items-center justify-between mb-2">
                                         <label className="text-sm text-gray-600">Description</label>
+                                        <SuggestionDropdown onSuggestionClick={(suggestion) => handleSuggestionClick(suggestion, index)} />
                                     </div>
                                     <Editor
                                         value={formData.college_description[index] || ''}

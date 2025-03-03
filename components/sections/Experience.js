@@ -4,9 +4,28 @@ import Editor from "react-simple-wysiwyg";
 import { ChevronDown, Trash2, Plus } from 'lucide-react';
 import SmartInputField from "@/components/SmartInputField";
 import MonthYearSelector from "@/components/MonthYearSelector";
+import SuggestionDropdown from "@/components/SuggestionDropdown";
 
 const Experience = ({ formData, updateFormData }) => {
     const [activeIndex, setActiveIndex] = useState(0);
+
+    const handleSuggestionClick = (suggestion, index) => {
+        const currentContent = formData.job_description[index] || '';
+        const bulletPoint = `<ul><li>${suggestion}</li></ul>`;
+
+        let newContent;
+        if (!currentContent) {
+            newContent = bulletPoint;
+        } else if (currentContent.includes('</ul>')) {
+            newContent = currentContent.replace('</ul>', `<li>${suggestion}</li></ul>`);
+        } else {
+            newContent = currentContent + bulletPoint;
+        }
+
+        const newArray = [...formData.job_description];
+        newArray[index] = newContent;
+        updateFormData('job_description', newArray);
+    };
 
     useEffect(() => {
         if (!formData.job_title?.length) {
@@ -166,6 +185,7 @@ const Experience = ({ formData, updateFormData }) => {
                                 <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
                                     <div className="flex items-center justify-between mb-2">
                                         <label className="text-sm text-gray-600">Description</label>
+                                        <SuggestionDropdown onSuggestionClick={(suggestion) => handleSuggestionClick(suggestion, index)} />
                                     </div>
                                     <Editor
                                         value={formData.job_description[index] || ''}

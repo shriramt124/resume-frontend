@@ -1,9 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import FormField from "@/components/FormField";
 import Editor from "react-simple-wysiwyg";
 import SmartInputField from "@/components/SmartInputField";
+import SuggestionDropdown from "@/components/SuggestionDropdown";
 
 const PersonalInfo = ({ formData, updateFormData }) => {
+    const handleSuggestionClick = (suggestion) => {
+        const currentContent = formData.professional_description || '';
+        const bulletPoint = `<ul><li>${suggestion}</li></ul>`;
+
+        if (!currentContent) {
+            updateFormData('professional_description', bulletPoint);
+        } else if (currentContent.includes('</ul>')) {
+            const newContent = currentContent.replace('</ul>', `<li>${suggestion}</li></ul>`);
+            updateFormData('professional_description', newContent);
+        } else {
+            updateFormData('professional_description', currentContent + bulletPoint);
+        }
+    };
+
     return (
         <div className="bg-white rounded-lg shadow-sm p-3 md:p-4">
             {/* Header */}
@@ -95,6 +110,7 @@ const PersonalInfo = ({ formData, updateFormData }) => {
                 <div className="p-4 bg-gray-50/70 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-200">
                     <div className="flex items-center justify-between mb-3">
                         <label className="text-sm font-medium text-gray-700">Professional Summary</label>
+                        <SuggestionDropdown onSuggestionClick={handleSuggestionClick} />
                     </div>
                     <div className="relative bg-white rounded-lg shadow-sm overflow-hidden">
                         <Editor

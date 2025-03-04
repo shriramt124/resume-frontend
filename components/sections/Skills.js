@@ -112,7 +112,7 @@ const Skills = ({ formData, updateFormData }) => {
     }, [selectedLanguages]);
 
     return (
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white rounded-lg shadow-sm p-4 md:p-6 transition-all duration-300 hover:shadow-md">
             <div className="mb-8">
                 <h2 className="text-2xl font-bold text-gray-800">Skills & Languages</h2>
                 <p className="text-gray-500 text-sm">Add your key skills and languages to showcase your expertise.</p>
@@ -128,7 +128,7 @@ const Skills = ({ formData, updateFormData }) => {
                             value={searchSkills}
                             onChange={(e) => handleSkillSearch(e.target.value)}
                             placeholder="Type to search for skills (e.g., web development)"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300"
                         />
                         {loadingSkills && (
                             <div className="absolute inset-y-0 right-3 flex items-center">
@@ -147,7 +147,7 @@ const Skills = ({ formData, updateFormData }) => {
                                 <div
                                     key={index}
                                     onClick={() => handleSkillSelect(skill)}
-                                    className="cursor-pointer px-4 py-2 hover:bg-gray-50 text-sm text-gray-700"
+                                    className="cursor-pointer px-4 py-2 hover:bg-gray-50 text-sm text-gray-700 transition-all duration-300"
                                 >
                                     {skill}
                                 </div>
@@ -162,7 +162,7 @@ const Skills = ({ formData, updateFormData }) => {
                                 {selectedSkills.map((skill, index) => (
                                     <div
                                         key={index}
-                                        className="flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm"
+                                        className="flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-300 hover:bg-blue-100"
                                     >
                                         {skill}
                                         <button
@@ -187,7 +187,7 @@ const Skills = ({ formData, updateFormData }) => {
                             value={searchLanguages}
                             onChange={(e) => setSearchLanguages(e.target.value)}
                             placeholder="Type to search for languages"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300"
                         />
                     </div>
 
@@ -200,7 +200,7 @@ const Skills = ({ formData, updateFormData }) => {
                                     <div
                                         key={index}
                                         onClick={() => handleLanguageSelect(lang)}
-                                        className="cursor-pointer px-4 py-2 hover:bg-gray-50 text-sm text-gray-700"
+                                        className="cursor-pointer px-4 py-2 hover:bg-gray-50 text-sm text-gray-700 transition-all duration-300"
                                     >
                                         {lang}
                                     </div>
@@ -215,7 +215,7 @@ const Skills = ({ formData, updateFormData }) => {
                                 {selectedLanguages.map((lang, index) => (
                                     <div
                                         key={index}
-                                        className="flex items-center gap-2 bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm"
+                                        className="flex items-center gap-2 bg-green-50 text-green-700 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-300 hover:bg-green-100"
                                     >
                                         {lang}
                                         <button

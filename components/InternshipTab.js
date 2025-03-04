@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Editor from "react-simple-wysiwyg";
 import ContentItem from "@/components/ContentItem";
 import SmartInputField from "@/components/SmartInputField";
+import SuggestionDropdown from "@/components/SuggestionDropdown";
 
 const InternshipTab = ({
                            formData,
@@ -18,6 +19,24 @@ const InternshipTab = ({
     const initializeEmptyInternship = () => {
         updateFormData('internship_title', ['']);
         updateFormData('internship_summary', ['']);
+    };
+
+    const handleSuggestionClick = (suggestion, index) => {
+        const currentContent = formData.internship_summary[index] || '';
+        const bulletPoint = `<ul><li>${suggestion}</li></ul>`;
+
+        let newContent;
+        if (!currentContent) {
+            newContent = bulletPoint;
+        } else if (currentContent.includes('</ul>')) {
+            newContent = currentContent.replace('</ul>', `<li>${suggestion}</li></ul>`);
+        } else {
+            newContent = currentContent + bulletPoint;
+        }
+
+        const newArray = [...formData.internship_summary];
+        newArray[index] = newContent;
+        updateFormData('internship_summary', newArray);
     };
 
     const removeItem = (index, type, e) => {
@@ -69,6 +88,7 @@ const InternshipTab = ({
                         <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
                             <div className="flex items-center justify-between mb-2">
                                 <label className="text-sm text-gray-600">Description</label>
+                                <SuggestionDropdown onSuggestionClick={(suggestion) => handleSuggestionClick(suggestion, index)} />
                             </div>
                             <Editor
                                 value={formData.internship_summary[index] || ''}

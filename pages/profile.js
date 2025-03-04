@@ -104,21 +104,20 @@ const ProfilePage = () => {
 
     return (
         <Layout>
-            <div className="min-h-screen flex items-center justify-center bg-white">
-                <div className="w-full max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
-                    <div className="mb-8">
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-gray-50">
+                <div className="w-full max-w-2xl px-4 py-8 sm:px-6 lg:px-8 bg-white rounded-2xl shadow-sm border border-gray-100 mx-4 my-8 sm:my-12 transition-all duration-300 hover:shadow-md">
+                    <div className="mb-12">
                         <div className="flex justify-between items-center">
                             <div>
-                                <h1 className="text-4xl font-bold text-gray-900 mb-2">Profile Settings</h1>
+                                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2 transition-all duration-300">Profile Settings</h1>
                                 <p className="text-lg text-gray-600">Update your personal information</p>
                             </div>
                             <button
                                 onClick={() => setIsEditing(!isEditing)}
-                                className={`px-6 py-3 rounded-lg transition-all duration-200 ${
-                                    isEditing
+                                className={`px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg transition-all duration-300 transform hover:scale-[1.02] ${isEditing
                                         ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                         : 'bg-blue-500 text-white hover:bg-blue-600'
-                                } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 disabled={loading}
                             >
                                 {isEditing ? 'Cancel' : 'Edit Profile'}
@@ -127,9 +126,8 @@ const ProfilePage = () => {
                     </div>
 
                     {/* Alert Messages */}
-                    <div className={`transition-all duration-300 ease-in-out mb-6 ${
-                        showAlert ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
-                    }`}>
+                    <div className={`transition-all duration-300 ease-in-out mb-6 ${showAlert ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+                        }`}>
                         {error && (
                             <Alert variant="destructive">
                                 <AlertTitle className="flex items-center">
@@ -154,9 +152,8 @@ const ProfilePage = () => {
                             <label className="block text-gray-600 mb-2 text-sm">
                                 Full Name
                             </label>
-                            <div className={`relative rounded-lg border ${
-                                errors.name ? 'border-red-300' : 'border-gray-300'
-                            } ${!isEditing ? 'bg-gray-50' : 'hover:border-blue-400 focus-within:border-blue-500'} 
+                            <div className={`relative rounded-lg border ${errors.name ? 'border-red-300' : 'border-gray-300'
+                                } ${!isEditing ? 'bg-gray-50' : 'hover:border-blue-400 focus-within:border-blue-500'} 
                             transition-colors`}>
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2">
                                     <UserCircle2 className={`w-5 h-5 ${isEditing ? 'text-blue-500' : 'text-gray-400'}`} />
@@ -165,11 +162,11 @@ const ProfilePage = () => {
                                     type="text"
                                     value={profileData.name}
                                     onChange={(e) => {
-                                        setProfileData({...profileData, name: e.target.value});
-                                        if (errors.name) setErrors({...errors, name: ''});
+                                        setProfileData({ ...profileData, name: e.target.value });
+                                        if (errors.name) setErrors({ ...errors, name: '' });
                                     }}
                                     disabled={!isEditing || loading}
-                                    className="w-full pl-12 pr-4 py-3.5 bg-transparent outline-none disabled:text-gray-500"
+                                    className="w-full pl-12 pr-4 py-3 sm:py-3.5 bg-transparent outline-none disabled:text-gray-500 transition-all duration-200 placeholder:text-gray-400"
                                     placeholder="Enter your full name"
                                 />
                             </div>
@@ -183,9 +180,8 @@ const ProfilePage = () => {
                             <label className="block text-gray-600 mb-2 text-sm">
                                 Email Address
                             </label>
-                            <div className={`relative rounded-lg border ${
-                                errors.email ? 'border-red-300' : 'border-gray-300'
-                            } ${!isEditing ? 'bg-gray-50' : 'hover:border-blue-400 focus-within:border-blue-500'} 
+                            <div className={`relative rounded-lg border ${errors.email ? 'border-red-300' : 'border-gray-300'
+                                } ${!isEditing ? 'bg-gray-50' : 'hover:border-blue-400 focus-within:border-blue-500'} 
                             transition-colors`}>
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2">
                                     <Mail className={`w-5 h-5 ${isEditing ? 'text-blue-500' : 'text-gray-400'}`} />
@@ -194,11 +190,11 @@ const ProfilePage = () => {
                                     type="email"
                                     value={profileData.email}
                                     onChange={(e) => {
-                                        setProfileData({...profileData, email: e.target.value});
-                                        if (errors.email) setErrors({...errors, email: ''});
+                                        setProfileData({ ...profileData, email: e.target.value });
+                                        if (errors.email) setErrors({ ...errors, email: '' });
                                     }}
                                     disabled={!isEditing || loading}
-                                    className="w-full pl-12 pr-4 py-3.5 bg-transparent outline-none disabled:text-gray-500"
+                                    className="w-full pl-12 pr-4 py-3 sm:py-3.5 bg-transparent outline-none disabled:text-gray-500 transition-all duration-200 placeholder:text-gray-400"
                                     placeholder="Enter your email address"
                                 />
                             </div>
@@ -212,9 +208,8 @@ const ProfilePage = () => {
                             <label className="block text-gray-600 mb-2 text-sm">
                                 Phone Number (Optional)
                             </label>
-                            <div className={`relative rounded-lg border ${
-                                errors.phone ? 'border-red-300' : 'border-gray-300'
-                            } ${!isEditing ? 'bg-gray-50' : 'hover:border-blue-400 focus-within:border-blue-500'} 
+                            <div className={`relative rounded-lg border ${errors.phone ? 'border-red-300' : 'border-gray-300'
+                                } ${!isEditing ? 'bg-gray-50' : 'hover:border-blue-400 focus-within:border-blue-500'} 
                             transition-colors`}>
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2">
                                     <Phone className={`w-5 h-5 ${isEditing ? 'text-blue-500' : 'text-gray-400'}`} />
@@ -225,12 +220,12 @@ const ProfilePage = () => {
                                     onChange={(e) => {
                                         const value = e.target.value.replace(/\D/g, '');
                                         if (value.length <= 10) {
-                                            setProfileData({...profileData, phone: value});
-                                            if (errors.phone) setErrors({...errors, phone: ''});
+                                            setProfileData({ ...profileData, phone: value });
+                                            if (errors.phone) setErrors({ ...errors, phone: '' });
                                         }
                                     }}
                                     disabled={!isEditing || loading}
-                                    className="w-full pl-12 pr-4 py-3.5 bg-transparent outline-none disabled:text-gray-500"
+                                    className="w-full pl-12 pr-4 py-3 sm:py-3.5 bg-transparent outline-none disabled:text-gray-500 transition-all duration-200 placeholder:text-gray-400"
                                     placeholder="Enter your phone number (optional)"
                                     maxLength="10"
                                 />
@@ -247,8 +242,9 @@ const ProfilePage = () => {
                                     type="submit"
                                     disabled={loading}
                                     className="px-6 py-3.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600
-                                    transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
-                                    flex items-center justify-center min-w-[140px]"
+                                    transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed
+                                    flex items-center justify-center min-w-[140px] transform hover:scale-[1.02]
+                                    shadow-sm hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                                 >
                                     {loading ? (
                                         <Loader2 className="w-5 h-5 animate-spin" />

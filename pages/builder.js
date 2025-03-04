@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {Briefcase, Check, Eye, Download, GraduationCap, Plus, Trophy, UserCircle2, X} from 'lucide-react';
-import {useRouter} from "next/router";
+import React, { useEffect, useState } from 'react';
+import { Briefcase, Check, Eye, Download, GraduationCap, Plus, Trophy, UserCircle2, X } from 'lucide-react';
+import { useRouter } from "next/router";
 import Layout from "@/components/Layout";
 import PersonalInfo from '../components/sections/PersonalInfo';
 import Experience from '../components/sections/Experience';
 import Skills from "@/components/sections/Skills";
 import Education from "@/components/sections/Education";
 import Others from "@/components/sections/Others";
-import {uuid} from "uuidv4";
+import { uuid } from "uuidv4";
 import ResumeModal from "@/components/ResumeModal";
 import DownloadSection from "@/components/DownloadSection";
 // First, add this import at the top with other imports
@@ -34,7 +34,6 @@ export default function Builder() {
     });
     const [selectedTemplate, setSelectedTemplate] = useState(formData?.templateName || 'modern');
     const router = useRouter();
-
     const handleTemplateChange = (template) => {
         setSelectedTemplate(template);
         setFormData(prev => ({
@@ -191,25 +190,25 @@ export default function Builder() {
     }, [profileData]);
 
     const sections = [
-        {id: 'personal', title: 'Personal Info', icon: UserCircle2},
-        {id: 'experience', title: 'Experience', icon: Briefcase},
-        {id: 'education', title: 'Education', icon: GraduationCap},
-        {id: 'skills', title: 'Skills', icon: Trophy},
-        {id: 'others', title: 'Others', icon: Plus}
+        { id: 'personal', title: 'Personal Info', icon: UserCircle2 },
+        { id: 'experience', title: 'Experience', icon: Briefcase },
+        { id: 'education', title: 'Education', icon: GraduationCap },
+        { id: 'skills', title: 'Skills', icon: Trophy },
+        { id: 'others', title: 'Others', icon: Plus }
     ];
 
     const renderSection = () => {
         switch (currentSection) {
             case 'personal':
-                return <PersonalInfo formData={formData} updateFormData={updateFormData}/>;
+                return <PersonalInfo formData={formData} updateFormData={updateFormData} />;
             case 'experience':
-                return <Experience formData={formData} updateFormData={updateFormData}/>;
+                return <Experience formData={formData} updateFormData={updateFormData} />;
             case 'education':
-                return <Education formData={formData} updateFormData={updateFormData}/>;
+                return <Education formData={formData} updateFormData={updateFormData} />;
             case 'skills':
-                return <Skills formData={formData} updateFormData={updateFormData}/>;
+                return <Skills formData={formData} updateFormData={updateFormData} />;
             case 'others':
-                return <Others formData={formData} updateFormData={updateFormData}/>;
+                return <Others formData={formData} updateFormData={updateFormData} />;
             default:
                 return null;
         }
@@ -222,13 +221,14 @@ export default function Builder() {
     };
 
     return (
-        <Layout>
-            <div className="min-h-screen bg-gray-50">
-                {/* Navigation Tabs */}
-                <nav className="bg-white shadow-md mb-6 sticky top-0 z-20 border-b">
-                    <div className="max-w-7xl mx-auto px-4">
-                        <div className="flex justify-between items-center py-1">
-                            <div className="flex overflow-x-auto md:overflow-visible md:space-x-6 hide-scrollbar">
+        <div className="min-h-screen bg-gray-50">
+            {/* Navigation Tabs */}
+            <nav className="bg-white shadow-md sticky top-0 z-20 border-b transition-all duration-300">
+                <div className="w-full mx-auto px-4 py-2 md:py-3">
+                    <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:items-center md:justify-between">
+                        {/* Navigation Tabs */}
+                        <div className="flex overflow-x-auto hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0 w-full">
+                            <div className="flex space-x-2 md:space-x-4 w-full">
                                 {sections.map((section, index) => {
                                     const Icon = section.icon;
                                     return (
@@ -239,155 +239,109 @@ export default function Builder() {
                                                 setCurrentSectionIndex(index);
                                             }}
                                             className={`
-                                                relative py-4 px-4 md:px-5 whitespace-nowrap transition-all duration-300 ease-in-out
-                                                flex items-center gap-2.5 min-w-max group
+                                                relative py-2.5 px-4 rounded-lg transition-all duration-300 transform
+                                                flex items-center gap-2 min-w-[120px] md:min-w-0
                                                 ${currentSection === section.id
-                                                ? 'text-blue-600 font-medium'
-                                                : index <= currentSectionIndex
-                                                    ? 'text-gray-700'
-                                                    : 'text-gray-500 hover:text-gray-700'
-                                            }
+                                                    ? 'bg-blue-50 text-blue-600 font-medium scale-[1.02] shadow-sm'
+                                                    : index <= currentSectionIndex
+                                                        ? 'text-gray-700 hover:bg-gray-50 hover:scale-[1.02]'
+                                                        : 'text-gray-500 hover:bg-gray-50 hover:scale-[1.02]'
+                                                }
                                             `}
                                         >
-                                            <Icon className={`w-5 h-5 transition-transform duration-300 ${currentSection === section.id ? 'scale-110' : 'group-hover:scale-105'}`}/>
-                                            <span className="font-medium">{section.title}</span>
+                                            <Icon className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 ${currentSection === section.id ? 'scale-110' : ''}`} />
+                                            <span className="text-sm whitespace-nowrap font-medium">{section.title}</span>
                                             {index < currentSectionIndex && (
-                                                <Check className="w-4 h-4 text-green-500 transition-opacity duration-200"/>
-                                            )}
-                                            {currentSection === section.id && (
-                                                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 transition-all duration-300 ease-out"></div>
+                                                <Check className="w-3 h-3 text-green-500 absolute right-2 top-1/2 -translate-y-1/2 transition-opacity duration-300" />
                                             )}
                                         </button>
                                     );
                                 })}
                             </div>
-
-                            {/* Action Buttons */}
-                            <div className="flex items-center gap-4">
-                                <button
-                                    onClick={() => setIsModalOpen(true)}
-                                    className="flex items-center gap-2 px-4 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg transition-all duration-200 border border-transparent hover:border-gray-200"
-                                >
-                                    <Eye className="w-5 h-5"/>
-                                    <span className="hidden md:inline font-medium">Preview</span>
-                                </button>
-                                <div className="flex items-center gap-2">
-                                    <button
-                                        onClick={() => setShowDownloadSection(true)}
-                                        className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 h-[42px] font-medium shadow-sm hover:shadow"
-                                    >
-                                        <Download className="w-5 h-5"/>
-                                        <span className="hidden md:inline">Download</span>
-                                    </button>
-                                </div>
-                            </div>
                         </div>
-                    </div>
-                </nav>
-
-                {/* Main Content */}
-                <div className="max-w-6xl mx-auto px-4 mb-20">
-                    <div className="w-full">
-                        {formData && renderSection()}
-                        {/* Navigation Buttons */}
-                        <div className="flex justify-between mt-10 mb-8">
+                        {/* Action Buttons */}
+                        <div className="flex items-center gap-3 pt-2 md:pt-0 border-t md:border-t-0">
                             <button
-                                onClick={() => {
-                                    if (currentSectionIndex > 0) {
-                                        setCurrentSectionIndex(currentSectionIndex - 1);
-                                        setCurrentSection(sections[currentSectionIndex - 1].id);
-                                    }
-                                }}
-                                disabled={currentSectionIndex === 0}
-                                className={`px-6 py-3 rounded-lg flex items-center gap-2 transition-all shadow-sm
-            ${currentSectionIndex === 0
-                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200'
-                                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 hover:shadow'}`}
+                                onClick={() => setIsModalOpen(true)}
+                                className="flex items-center gap-2 px-4 py-2.5 text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition-all duration-300 text-sm font-medium min-w-[100px] justify-center"
                             >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-5 w-5"
-                                    viewBox="0 0 20 20"
-                                    fill="currentColor"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                                Previous
+                                <Eye className="w-4 h-4" />
+                                <span>Preview</span>
                             </button>
-
-                            <button
-                                onClick={() => {
-                                    if (currentSectionIndex < sections.length - 1) {
-                                        setCurrentSectionIndex(currentSectionIndex + 1);
-                                        setCurrentSection(sections[currentSectionIndex + 1].id);
-                                    }
-                                }}
-                                disabled={currentSectionIndex === sections.length - 1}
-                                className={`px-6 py-3 rounded-lg flex items-center gap-2 transition-all
-            ${currentSectionIndex === sections.length - 1
-                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200'
-                                    : 'bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg'}`}
+                            <Select
+                                value={selectedTemplate}
+                                onValueChange={setSelectedTemplate}
                             >
-                                Next
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-5 w-5"
-                                    viewBox="0 0 20 20"
-                                    fill="currentColor"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
+                                <SelectTrigger className="w-[130px] md:w-[150px] h-[42px] text-sm border-gray-200 hover:border-gray-300 bg-gray-50 transition-all duration-300">
+                                    <SelectValue placeholder="Template" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem key="modern" value="modern">
+                                        Template
+                                    </SelectItem>
+                                    {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
+                                        <SelectItem key={num} value={`demo${num}`}>
+                                            Template {num}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <button
+                                onClick={() => setShowDownloadSection(true)}
+                                className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md transform hover:translate-y-[-1px] flex-1 md:flex-none justify-center min-w-[120px]"
+                            >
+                                <Download className="w-4 h-4" />
+                                <span>Download</span>
                             </button>
                         </div>
                     </div>
                 </div>
+            </nav>
 
-
-                {/* Download Section Modal */}
-                {showDownloadSection && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center p-4">
-                        <div className="bg-white rounded-lg w-full max-w-md">
-                            <div className="flex justify-between items-center p-4 border-b">
-                                <h3 className="font-medium">Download Resume</h3>
-                                <button
-                                    onClick={() => setShowDownloadSection(false)}
-                                    className="text-gray-400 hover:text-gray-500"
-                                >
-                                    <X className="w-5 h-5"/>
-                                </button>
-                            </div>
-                            <DownloadSection
-                                formData={formData}
-                                fontStyles={fontStyles}
-                                templateName={selectedTemplate}
-                            />
-                        </div>
-                    </div>
-                )}
-
-                {/* Preview Modal */}
-                <ResumeModal
-                    isOpen={isModalOpen}
-                    onRequestClose={() => setIsModalOpen(false)}
-                    formData={formData}
-                    fontStyles={fontStyles}
-                    defaultData={defaultData}
-                    onTemplateChange={handleTemplateChange}
-                    selectedTemplate={selectedTemplate}
-                    onDownload={() => {
-                        setIsModalOpen(false);
-                        setShowDownloadSection(true);
-                    }}
-                />
+            {/* Main Content */}
+            <div className="w-full mx-auto px-4 mb-20">
+                <div className="w-full">
+                    {formData && renderSection()}
+                </div>
             </div>
-        </Layout>
+
+            {/* Download Section Modal */}
+            {showDownloadSection && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-lg w-full max-w-md">
+                        <div className="flex justify-between items-center p-4 border-b">
+                            <h3 className="font-medium">Download Resume</h3>
+                            <button
+                                onClick={() => setShowDownloadSection(false)}
+                                className="text-gray-400 hover:text-gray-500"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <DownloadSection
+                            formData={formData}
+                            fontStyles={fontStyles}
+                            templateName={selectedTemplate}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {/* Preview Modal */}
+            <ResumeModal
+                isOpen={isModalOpen}
+                onRequestClose={() => setIsModalOpen(false)}
+                formData={formData}
+                fontStyles={fontStyles}
+                defaultData={defaultData}
+                onTemplateChange={handleTemplateChange}
+                selectedTemplate={selectedTemplate}
+                onDownload={() => {
+                    setIsModalOpen(false);
+                    setShowDownloadSection(true);
+                }}
+            />
+        </div>
+
     );
 }

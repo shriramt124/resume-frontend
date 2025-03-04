@@ -268,24 +268,7 @@ export default function Builder() {
                                 <Eye className="w-4 h-4" />
                                 <span>Preview</span>
                             </button>
-                            <Select
-                                value={selectedTemplate}
-                                onValueChange={setSelectedTemplate}
-                            >
-                                <SelectTrigger className="w-[130px] md:w-[150px] h-[42px] text-sm border-gray-200 hover:border-gray-300 bg-gray-50 transition-all duration-300">
-                                    <SelectValue placeholder="Template" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem key="modern" value="modern">
-                                        Template
-                                    </SelectItem>
-                                    {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
-                                        <SelectItem key={num} value={`demo${num}`}>
-                                            Template {num}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+                          
                             <button
                                 onClick={() => setShowDownloadSection(true)}
                                 className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md transform hover:translate-y-[-1px] flex-1 md:flex-none justify-center min-w-[120px]"

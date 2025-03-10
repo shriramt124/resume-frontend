@@ -110,7 +110,11 @@ const PersonalInfo = ({ formData, updateFormData }) => {
                 <div className="p-4 bg-gray-50/70 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-200">
                     <div className="flex items-center justify-between mb-3">
                         <label className="text-sm font-medium text-gray-700">Professional Summary</label>
-                        <SuggestionDropdown onSuggestionClick={handleSuggestionClick} />
+                        <SuggestionDropdown 
+                            onSuggestionClick={handleSuggestionClick} 
+                            title={formData.professional_summary || 'professional summary'} 
+                            customPrompt="Provide professional summary bullet points for a resume with this title:" 
+                        />
                     </div>
                     <div className="relative bg-white rounded-lg shadow-sm overflow-hidden">
                         <Editor

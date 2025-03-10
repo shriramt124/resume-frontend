@@ -185,7 +185,11 @@ const Experience = ({ formData, updateFormData }) => {
                                 <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
                                     <div className="flex items-center justify-between mb-2">
                                         <label className="text-sm text-gray-600">Description</label>
-                                        <SuggestionDropdown onSuggestionClick={(suggestion) => handleSuggestionClick(suggestion, index)} />
+                                        <SuggestionDropdown
+                                            onSuggestionClick={(suggestion) => handleSuggestionClick(suggestion, index)}
+                                            title={`${formData.job_title[index] || 'job'} experience`}
+                                            customPrompt="Provide a list of job responsibilities and achievements for a resume based on this role:"
+                                        />
                                     </div>
                                     <Editor
                                         value={formData.job_description[index] || ''}

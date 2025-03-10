@@ -11,8 +11,13 @@ import {
     FileDown,
     FileOutput,
     UserCircle,
-    LogOut
+    LogOut,
+    CheckCircle2,
+    Clock,
+    ExternalLink,
+    Plus
 } from 'lucide-react';
+import Image from 'next/image';
 import { useState, useRef, useEffect } from 'react';
 import Builder from './builder.js'
 import Layout from '@/components/Layout';
@@ -25,6 +30,44 @@ export default function Home() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [showBuilder, setShowBuilder] = useState(false);
     const dropdownRef = useRef(null);
+    const [profiles, setProfiles] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [activeProfileId, setActiveProfileId] = useState(null);
+
+    const fetchProfiles = async () => {
+        setIsLoading(true);
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${process.env.NEXT_PUBLIC_WEB_URL}/api/get-resume`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+            });
+
+            if (!response.ok) throw new Error('Failed to fetch profiles');
+
+            const data = await response.json();
+            if (data && Array.isArray(data.data)) {
+                setProfiles(data.data);
+                // Set active profile from localStorage if exists
+                const storedProfile = JSON.parse(localStorage.getItem('profileData') || '{}');
+                if (storedProfile.id) {
+                    setActiveProfileId(storedProfile.id);
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching profiles:', error);
+            setProfiles([]);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchProfiles();
+    }, []);
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -35,6 +78,17 @@ export default function Home() {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    const handleActiveResume = (profile) => {
+        localStorage.setItem('profileData', JSON.stringify(profile));
+        setActiveProfileId(profile.id);
+        setShowBuilder(true);
+    };
+
+    const formatDate = (dateString) => {
+        const options = { month: 'short', day: 'numeric', year: 'numeric' };
+        return new Date(dateString).toLocaleDateString('en-US', options);
+    };
 
     const [activeTab, setActiveTab] = useState('Dashboard');
 
@@ -60,8 +114,9 @@ export default function Home() {
                     { icon: DollarSign, text: 'Salary Analyzer' },
                     { icon: Search, text: 'Job Search Method' },
                     { icon: Headphones, text: 'Coaching' },
+                    { icon: FileOutput, text: 'Cover Letters', hidden: true }, // Added hidden property to hide this item
                     { icon: MoreHorizontal, text: 'Other' },
-                ].map((item, index) => (
+                ].filter(item => !item.hidden).map((item, index) => (
                     <a
                         key={index}
                         href="#"
@@ -117,64 +172,93 @@ export default function Home() {
                                     return (
                                         <div>
                                             <div className="mb-6">
-                                                <h2 className="text-2xl font-semibold mb-4">Resumes & Cover Letters</h2>
+                                                <h2 className="text-2xl font-semibold mb-4">Resumes</h2>
                                                 <div className="border-b">
                                                     <div className="flex gap-6">
                                                         <button className="px-4 py-2 text-blue-600 border-b-2 border-blue-600">Resumes</button>
-                                                        <button className="px-4 py-2 text-gray-600">Cover Letters</button>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                                                {/* Existing Resume Card */}
-                                                <div
-                                                    onClick={() => setShowBuilder(true)}
-                                                    className="border rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-[1.02] cursor-pointer h-[480px]"
-                                                >
-                                                    <div className="bg-gradient-to-r from-yellow-200 to-yellow-100 h-48 flex items-center justify-center transition-colors duration-300 hover:from-yellow-300 hover:to-yellow-200">
-                                                        <span className="text-2xl font-bold text-gray-800">JOHN DOE</span>
+                                                {isLoading ? (
+                                                    <div className="col-span-full flex justify-center items-center py-12">
+                                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                                                     </div>
-                                                    <div className="p-6 space-y-4">
-                                                        <div className="flex justify-between items-center">
-                                                            <h3 className="font-medium text-lg">Untitled</h3>
-                                                            <span className="text-sm text-gray-500 font-medium">Updated 4 Dec 2022</span>
-                                                        </div>
-                                                        <div className="inline-flex items-center px-3 py-1.5 bg-pink-50 text-pink-700 rounded-full text-sm font-medium transition-colors duration-200 hover:bg-pink-100">
-                                                            <div className="w-2 h-2 rounded-full bg-pink-500 mr-2"></div>
-                                                            15% Your resume score
-                                                        </div>
-                                                        <div className="flex gap-3">
-                                                            <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border rounded-lg hover:bg-blue-50 hover:border-blue-200 transition-all duration-200 text-sm font-medium">
-                                                                <FileDown size={18} className="text-blue-600" />
-                                                                Download PDF
-                                                            </button>
-                                                            <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border rounded-lg hover:bg-blue-50 hover:border-blue-200 transition-all duration-200 text-sm font-medium">
-                                                                <FileOutput size={18} className="text-blue-600" />
-                                                                Export to DOCX
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                ) : (
+                                                    <>
+                                                        {profiles.map((profile) => (
+                                                            <div
+                                                                key={profile.id}
+                                                                onClick={() => handleActiveResume(profile)}
+                                                                className={`bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-200 cursor-pointer ${activeProfileId === profile.id ? 'ring-2 ring-blue-500' : ''}`}
+                                                            >
+                                                                <div className="relative w-full h-48 bg-gray-100">
+                                                                    <Image
+                                                                        src={`/templates/${profile.template_id || 'modern'}.png`}
+                                                                        alt="Resume preview"
+                                                                        fill
+                                                                        className="object-cover"
+                                                                        priority
+                                                                    />
+                                                                </div>
+                                                                <div className="p-6">
+                                                                    <div className="flex items-center justify-between mb-4">
+                                                                        <div className="flex items-center">
+                                                                            {activeProfileId === profile.id ? (
+                                                                                <div className="flex items-center">
+                                                                                    <CheckCircle2 className="h-5 w-5 text-blue-600 mr-2" />
+                                                                                    <span className="text-xs font-medium text-blue-600 px-2 py-0.5 bg-blue-50 rounded-full">
+                                                                                        Active
+                                                                                    </span>
+                                                                                </div>
+                                                                            ) : (
+                                                                                <span className="w-3 h-3 bg-gray-200 rounded-full mr-2" />
+                                                                            )}
+                                                                        </div>
+                                                                    </div>
 
-                                                {/* New Resume Card */}
-                                                <div
-                                                    onClick={() => setShowBuilder(true)}
-                                                    className="border-2 border-dashed border-gray-200 rounded-lg p-8 flex flex-col items-center justify-center text-center space-y-6 transition-all duration-300 hover:border-blue-400 hover:bg-blue-50/30 group cursor-pointer h-[480px]"
-                                                >
-                                                    <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                                                        <h3 className="text-2xl font-semibold text-blue-600">+</h3>
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <h3 className="text-xl font-semibold text-gray-800">New Resume</h3>
-                                                        <p className="text-gray-600 max-w-sm text-sm leading-relaxed">
-                                                            Create a tailored resume for each job application. Double your chances of getting hired!
-                                                        </p>
-                                                    </div>
-                                                    <button className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium shadow-sm hover:shadow group-hover:scale-105">
-                                                        Create New
-                                                    </button>
-                                                </div>
+                                                                    <h3 className="text-lg font-semibold text-gray-900">{`${profile.first_name} ${profile.last_name}`}</h3>
+
+                                                                    <p className="mt-1 text-sm text-gray-600">{profile.occupation || 'Untitled'}</p>
+
+                                                                    <div className="mt-4 flex items-center text-sm text-gray-500">
+                                                                        <Clock className="h-4 w-4 mr-1" />
+                                                                        <span>Updated {formatDate(profile.updated_at)}</span>
+                                                                    </div>
+
+                                                                    <div className="mt-6 flex items-center justify-between">
+                                                                        <button
+                                                                            className="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors duration-200"
+                                                                        >
+                                                                            Use Resume
+                                                                            <ExternalLink className="ml-2 h-4 w-4" />
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+
+                                                        {/* New Resume Card */}
+                                                        <div
+                                                            onClick={() => setShowBuilder(true)}
+                                                            className="border-2 border-dashed border-gray-200 rounded-lg p-8 flex flex-col items-center justify-center text-center space-y-6 transition-all duration-300 hover:border-blue-400 hover:bg-blue-50/30 group cursor-pointer h-[480px]"
+                                                        >
+                                                            <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                                                <h3 className="text-2xl font-semibold text-blue-600">+</h3>
+                                                            </div>
+                                                            <div className="space-y-2">
+                                                                <h3 className="text-xl font-semibold text-gray-800">New Resume</h3>
+                                                                <p className="text-gray-600 max-w-sm text-sm leading-relaxed">
+                                                                    Create a tailored resume for each job application. Double your chances of getting hired!
+                                                                </p>
+                                                            </div>
+                                                            <button className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium shadow-sm hover:shadow group-hover:scale-105">
+                                                                Create New
+                                                            </button>
+                                                        </div>
+                                                    </>
+                                                )}
                                             </div>
                                         </div>
                                     );
@@ -187,27 +271,4 @@ export default function Home() {
     );
 }
 
-const renderMainContent = () => {
-    switch (activeTab) {
-        case 'Jobs':
-            return <Jobs />;
-        case 'Job Tracker':
-            return <JobTracker />;
-        case 'Interview Prep':
-            return <InterviewPrep />;
-        case 'Salary Analyzer':
-            return <SalaryAnalyzer />;
-        default:
-            return (
-                <div className="mb-6">
-                    <h2 className="text-2xl font-semibold mb-4">Resumes & Cover Letters</h2>
-                    <div className="border-b">
-                        <div className="flex gap-6">
-                            <button className="px-4 py-2 text-blue-600 border-b-2 border-blue-600">Resumes</button>
-                            <button className="px-4 py-2 text-gray-600">Cover Letters</button>
-                        </div>
-                    </div>
-                </div>
-            );
-    }
-};
+

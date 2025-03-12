@@ -23,20 +23,32 @@ const InternshipTab = ({
 
     const handleSuggestionClick = (suggestion, index) => {
         const currentContent = formData.internship_summary[index] || '';
-        const bulletPoint = `<ul><li>${suggestion}</li></ul>`;
+        const bulletPoint = `<li>${suggestion}</li>`;
 
         let newContent;
         if (!currentContent) {
-            newContent = bulletPoint;
+            newContent = `<ul>${bulletPoint}</ul>`;
         } else if (currentContent.includes('</ul>')) {
-            newContent = currentContent.replace('</ul>', `<li>${suggestion}</li></ul>`);
+            // Check if the suggestion is already present
+            if (currentContent.includes(bulletPoint)) {
+                // Remove the suggestion
+                newContent = currentContent.replace(bulletPoint, '').replace(/<ul>\s*<\/ul>/, '');
+            } else {
+                // Add the suggestion before the closing ul tag
+                newContent = currentContent.replace('</ul>', `${bulletPoint}</ul>`);
+            }
         } else {
-            newContent = currentContent + bulletPoint;
+            newContent = `<ul>${bulletPoint}</ul>`;
         }
 
         const newArray = [...formData.internship_summary];
         newArray[index] = newContent;
         updateFormData('internship_summary', newArray);
+    };
+
+    const isSuggestionSelected = (suggestion, index) => {
+        const currentContent = formData.internship_summary[index] || '';
+        return currentContent.includes(`<li>${suggestion}</li>`);
     };
 
     const removeItem = (index, type, e) => {
@@ -88,7 +100,12 @@ const InternshipTab = ({
                         <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
                             <div className="flex items-center justify-between mb-2">
                                 <label className="text-sm text-gray-600">Description</label>
-                                <SuggestionDropdown onSuggestionClick={(suggestion) => handleSuggestionClick(suggestion, index)} />
+                                <SuggestionDropdown 
+                                    onSuggestionClick={(suggestion) => handleSuggestionClick(suggestion, index)}
+                                    title={formData.internship_title[index] || 'internship'}
+                                    customPrompt="Provide a comprehensive list of detailed professional descriptions and achievements for this internship role:"
+                                    isSuggestionSelected={(suggestion) => isSuggestionSelected(suggestion, index)}
+                                />
                             </div>
                             <Editor
                                 value={formData.internship_summary[index] || ''}

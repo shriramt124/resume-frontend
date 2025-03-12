@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import ContentItem from "@/components/ContentItem";
 import Editor from "react-simple-wysiwyg";
 import SmartInputField from "@/components/SmartInputField";
+import SuggestionDropdown from "@/components/SuggestionDropdown";
 
 const CertificateTab = ({
                             formData,
@@ -31,6 +32,24 @@ const CertificateTab = ({
         });
 
         setActiveIndex(Math.max(0, activeIndex - 1));
+    };
+
+    const handleSuggestionClick = (suggestion, index) => {
+        const currentContent = formData.certificate_description[index] || '';
+        const bulletPoint = `<ul><li>${suggestion}</li></ul>`;
+
+        let newContent;
+        if (!currentContent) {
+            newContent = bulletPoint;
+        } else if (currentContent.includes('</ul>')) {
+            newContent = currentContent.replace('</ul>', `<li>${suggestion}</li></ul>`);
+        } else {
+            newContent = currentContent + bulletPoint;
+        }
+
+        const newArray = [...formData.certificate_description];
+        newArray[index] = newContent;
+        updateFormData('certificate_description', newArray);
     };
 
     if (!formData.certificate_title?.length) {
@@ -69,6 +88,15 @@ const CertificateTab = ({
                         <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
                             <div className="flex items-center justify-between mb-2">
                                 <label className="text-sm text-gray-600">Description</label>
+                                <SuggestionDropdown
+                                    onSuggestionClick={(suggestion) => handleSuggestionClick(suggestion, index)}
+                                    title={formData.certificate_title[index] || 'certificate'}
+                                    customPrompt="provide detailed descriptions and achievements related to this certificate:"
+                                    isSuggestionSelected={(suggestion) => {
+                                        const content = formData.certificate_description[index] || '';
+                                        return content.includes(suggestion);
+                                    }}
+                                />
                             </div>
                             <Editor
                                 value={formData.certificate_description[index] || ''}

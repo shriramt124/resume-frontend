@@ -113,7 +113,7 @@ const PersonalInfo = ({ formData, updateFormData }) => {
                         <SuggestionDropdown 
                             onSuggestionClick={handleSuggestionClick} 
                             title={formData.professional_summary || 'professional summary'} 
-                            customPrompt="Provide professional summary bullet points for a resume with this title:" 
+                            customPrompt="provide a professional summary based on this title:" 
                         />
                     </div>
                     <div className="relative bg-white rounded-lg shadow-sm overflow-hidden">

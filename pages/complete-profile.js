@@ -73,7 +73,7 @@ const CompleteProfilePage = () => {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('userData', JSON.stringify(data.user));
                 localStorage.removeItem('profileData');
-                router.push('/builder?templateId=modern');
+                router.push('/dashboard');
             }
         } catch (err) {
             setError(err.message);

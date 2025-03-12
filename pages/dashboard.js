@@ -111,11 +111,11 @@ export default function Home() {
                     { icon: Briefcase, text: 'Jobs' },
                     { icon: LineChart, text: 'Job Tracker' },
                     { icon: GraduationCap, text: 'Interview Prep' },
-                    { icon: DollarSign, text: 'Salary Analyzer' },
-                    { icon: Search, text: 'Job Search Method' },
-                    { icon: Headphones, text: 'Coaching' },
+                    { icon: DollarSign, text: 'Salary Analyzer',hidden:true },
+                    { icon: Search, text: 'Job Search Method',hidden:true },
+                    { icon: Headphones, text: 'Coaching' ,hidden:true},
                     { icon: FileOutput, text: 'Cover Letters', hidden: true }, // Added hidden property to hide this item
-                    { icon: MoreHorizontal, text: 'Other' },
+                    { icon: MoreHorizontal, text: 'Other' ,hidden:true},
                 ].filter(item => !item.hidden).map((item, index) => (
                     <a
                         key={index}
@@ -193,14 +193,15 @@ export default function Home() {
                                                                 onClick={() => handleActiveResume(profile)}
                                                                 className={`bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-200 cursor-pointer ${activeProfileId === profile.id ? 'ring-2 ring-blue-500' : ''}`}
                                                             >
-                                                                <div className="relative w-full h-48 bg-gray-100">
-                                                                    <Image
+                                                                <div className="relative w-full h-40 sm:h-45 bg-yellow-200 flex justify-center items-center ">
+                                                                    {/* <Image
                                                                         src={`/templates/${profile.template_id || 'modern'}.png`}
                                                                         alt="Resume preview"
                                                                         fill
                                                                         className="object-cover"
                                                                         priority
-                                                                    />
+                                                                    /> */}
+                                                                    <h1 className='text-2xl font-bold'>{profile.first_name}</h1>
                                                                 </div>
                                                                 <div className="p-6">
                                                                     <div className="flex items-center justify-between mb-4">

@@ -9,6 +9,11 @@ import SuggestionDropdown from "@/components/SuggestionDropdown";
 const Experience = ({ formData, updateFormData }) => {
     const [activeIndex, setActiveIndex] = useState(0);
 
+    const isSuggestionSelected = (suggestion, index) => {
+        const editorContent = formData.job_description[index] || '';
+        return editorContent.includes(`<li>${suggestion}</li>`);
+    };
+
     const handleSuggestionClick = (suggestion, index) => {
         const currentContent = formData.job_description[index] || '';
         const bulletPoint = `<ul><li>${suggestion}</li></ul>`;
@@ -17,7 +22,16 @@ const Experience = ({ formData, updateFormData }) => {
         if (!currentContent) {
             newContent = bulletPoint;
         } else if (currentContent.includes('</ul>')) {
-            newContent = currentContent.replace('</ul>', `<li>${suggestion}</li></ul>`);
+            // Check if suggestion already exists
+            if (isSuggestionSelected(suggestion, index)) {
+                // Remove the suggestion
+                newContent = currentContent.replace(`<li>${suggestion}</li>`, '');
+                // Clean up empty ul tags
+                newContent = newContent.replace(/<ul>\s*<\/ul>/, '');
+            } else {
+                // Add new suggestion
+                newContent = currentContent.replace('</ul>', `<li>${suggestion}</li></ul>`);
+            }
         } else {
             newContent = currentContent + bulletPoint;
         }
@@ -123,8 +137,7 @@ const Experience = ({ formData, updateFormData }) => {
                         </div>
 
                         <div className={`transition-all duration-200 ease-in-out
-                            ${activeIndex === index ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}
-                            overflow-hidden`}>
+                            ${activeIndex === index ? 'max-h-none opacity-100 visible' : 'max-h-0 opacity-0 invisible'}`}>
                             <div className="p-3 bg-white space-y-3">
                                 <div className="grid grid-cols-1 gap-3">
                                     <FormField
@@ -182,14 +195,17 @@ const Experience = ({ formData, updateFormData }) => {
                                     />
                                 </div>
 
-                                <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <label className="text-sm text-gray-600">Description</label>
-                                        <SuggestionDropdown
-                                            onSuggestionClick={(suggestion) => handleSuggestionClick(suggestion, index)}
-                                            title={`${formData.job_title[index] || 'job'} experience`}
-                                            customPrompt="Provide a list of job responsibilities and achievements for a resume based on this role:"
-                                        />
+                                <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg relative">
+                                    <div className="flex items-center justify-between mb-3 z-10 relative">
+                                        <label className="text-sm font-medium text-gray-600">Description</label>
+                                        <div className="relative z-30">
+                                            <SuggestionDropdown
+                                                onSuggestionClick={(suggestion) => handleSuggestionClick(suggestion, index)}
+                                                title={`${formData.job_title[index] || 'job'} experience`}
+                                                customPrompt="Provide a list of job responsibilities and achievements for a resume based on this role:"
+                                                isSuggestionSelected={(suggestion) => isSuggestionSelected(suggestion, index)}
+                                            />
+                                        </div>
                                     </div>
                                     <Editor
                                         value={formData.job_description[index] || ''}
@@ -200,7 +216,7 @@ const Experience = ({ formData, updateFormData }) => {
                                         }}
                                         className="w-full min-h-[120px] border border-gray-200 rounded-lg
                                             focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-blue-500
-                                            transition-all duration-300"
+                                            transition-all duration-300 relative z-10"
                                     />
                                 </div>
                             </div>

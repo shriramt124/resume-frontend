@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Plus, X, Loader2, ChevronDown } from 'lucide-react';
+import { Plus, X, Loader2, ChevronDown, Search } from 'lucide-react';
 import { useSuggestionGenerator } from '@/hooks/useSuggestionGenerator';
+import debounce from 'lodash/debounce';
 
-export default function SuggestionDropdown({ onSuggestionClick, title = 'professional summary', customPrompt = null }) {
+export default function SuggestionDropdown({ onSuggestionClick, title = 'professional summary', customPrompt = null, isSuggestionSelected }) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [previousTitle, setPreviousTitle] = useState(title);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [typingTimeout, setTypingTimeout] = useState(null);
     const dropdownRef = useRef(null);
     const {
         suggestions,
@@ -13,23 +16,18 @@ export default function SuggestionDropdown({ onSuggestionClick, title = 'profess
         setSuggestions
     } = useSuggestionGenerator();
 
-    // Generate professional summary suggestions when dropdown is opened
+    // Generate suggestions when dropdown is opened
     const handleDropdownToggle = () => {
         const newState = !isDropdownOpen;
         setIsDropdownOpen(newState);
 
-        // Generate suggestions when opening the dropdown
         if (newState) {
-            // Check if title has changed since last time or if suggestions are empty
             if (previousTitle !== title || suggestions.length === 0) {
-                // Clear previous suggestions when title changes
                 if (previousTitle !== title) {
                     setSuggestions([]);
                 }
-                // Update previous title
                 setPreviousTitle(title);
-                // Always use the custom prompt if provided
-                const promptType = customPrompt || `Provide a list of professional summary phrases for a resume based on the role:`;
+                const promptType = customPrompt || `Provide a comprehensive list of at least 8-10 detailed professional summary phrases for a resume based on the role:`;
                 generateSuggestions(title, promptType);
             }
         }
@@ -38,12 +36,9 @@ export default function SuggestionDropdown({ onSuggestionClick, title = 'profess
     // Regenerate suggestions when title changes while dropdown is open
     useEffect(() => {
         if (isDropdownOpen && title) {
-            // Clear previous suggestions when title changes
             setSuggestions([]);
-            // Update previous title
             setPreviousTitle(title);
-            // Always use the custom prompt if provided
-            const promptType = customPrompt || `Provide a list of professional summary phrases for a resume based on the role:`;
+            const promptType = customPrompt || `Provide a comprehensive list of at least 8-10 detailed professional summary phrases for a resume based on the role:`;
             generateSuggestions(title, promptType);
         }
     }, [title]);
@@ -58,8 +53,11 @@ export default function SuggestionDropdown({ onSuggestionClick, title = 'profess
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
+            if (typingTimeout) {
+                clearTimeout(typingTimeout);
+            }
         };
-    }, []);
+    }, [typingTimeout]);
 
     return (
         <div className="relative" ref={dropdownRef}>
@@ -75,7 +73,7 @@ export default function SuggestionDropdown({ onSuggestionClick, title = 'profess
             </button>
 
             {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-10 animate-fadeIn">
+                <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-50 animate-fadeIn">
                     <div className="flex justify-between items-center p-2 border-b">
                         <span className="text-sm font-medium text-gray-700">Suggested phrases for {title}</span>
                         <button
@@ -85,6 +83,43 @@ export default function SuggestionDropdown({ onSuggestionClick, title = 'profess
                             <X className="w-4 h-4" />
                         </button>
                     </div>
+                    
+                    <div className="p-2 border-b">
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <Search className="h-4 w-4 text-gray-400" />
+                            </div>
+                            <input
+                                type="text"
+                                className="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-md text-sm placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Search suggestions..."
+                                value={searchTerm}
+                                onChange={(e) => {
+                                    const newSearchTerm = e.target.value;
+                                    setSearchTerm(newSearchTerm);
+                                    
+                                    if (typingTimeout) {
+                                        clearTimeout(typingTimeout);
+                                    }
+                                    
+                                    const newTimeout = setTimeout(() => {
+                                        if (newSearchTerm.trim()) {
+                                            setSuggestions([]);
+                                            const promptType = customPrompt || `Provide a comprehensive list of at least 8-10 detailed professional summary phrases for a resume based on the role:`;
+                                            generateSuggestions(newSearchTerm, promptType);
+                                        } else if (title) {
+                                            setSuggestions([]);
+                                            const promptType = customPrompt || `Provide a comprehensive list of at least 8-10 detailed professional summary phrases for a resume based on the role:`;
+                                            generateSuggestions(title, promptType);
+                                        }
+                                    }, 500);
+                                    
+                                    setTypingTimeout(newTimeout);
+                                }}
+                            />
+                        </div>
+                    </div>
+                    
                     <div className="p-2 space-y-1 max-h-60 overflow-y-auto">
                         {isLoading ? (
                             <div className="flex justify-center items-center py-4">
@@ -92,19 +127,26 @@ export default function SuggestionDropdown({ onSuggestionClick, title = 'profess
                                 <span className="ml-2 text-sm text-gray-600">Generating suggestions...</span>
                             </div>
                         ) : suggestions.length > 0 ? (
-                            suggestions.map((suggestion, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => {
-                                        onSuggestionClick(suggestion);
-                                        setIsDropdownOpen(false);
-                                    }}
-                                    className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-200 flex items-center gap-2"
-                                >
-                                    <Plus className="w-3 h-3 text-blue-500" />
-                                    {suggestion}
-                                </button>
-                            ))
+                            suggestions
+                                .filter(suggestion => 
+                                    searchTerm === '' || suggestion.toLowerCase().includes(searchTerm.toLowerCase())
+                                )
+                                .map((suggestion, index) => {
+                                    const isSelected = isSuggestionSelected ? isSuggestionSelected(suggestion) : false;
+                                    return (
+                                        <button
+                                            key={index}
+                                            onClick={() => {
+                                                onSuggestionClick(suggestion);
+                                            }}
+                                            className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors duration-200 flex items-center gap-2
+                                                ${isSelected ? 'text-blue-600 bg-blue-50' : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'}`}
+                                        >
+                                            <Plus className={`w-3 h-3 ${isSelected ? 'text-blue-600' : 'text-blue-500'}`} />
+                                            {suggestion}
+                                        </button>
+                                    );
+                                })
                         ) : (
                             <div className="text-center py-3 text-sm text-gray-500">
                                 No suggestions available
@@ -112,7 +154,6 @@ export default function SuggestionDropdown({ onSuggestionClick, title = 'profess
                         )}
                     </div>
                 </div>
-
             )}
         </div>
     );

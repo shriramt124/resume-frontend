@@ -10,8 +10,8 @@ export default function Home() {
         if (!loading && user) {
             const template = router.query.templateId || 'modern';
             router.replace({
-                pathname: '/builder',
-                query: { templateId: template }
+                pathname: '/dashboard',
+               query: { templateId: template }
             });
         }
     }, [loading, user, router]);

@@ -16,15 +16,17 @@ export const useSuggestionGenerator = () => {
                     messages: [
                         {
                             role: "system",
-                            content: customPrompt || `Provide a list of professional description of this job title : ${title}.`,
+                            content: customPrompt || `Provide a comprehensive list of at least 8-10 detailed professional descriptions for this job title or search term. Make suggestions diverse, specific, and relevant to modern resume standards: ${title}.`,
                         },
                         {
                             role: "user",
                             content: customPrompt
-                                ? `${customPrompt} : ${title}`
-                                : `Give me a list of professional description of this job title : ${title}.`
+                                ? `${customPrompt} : ${title}. Please provide at least 8-10 detailed and diverse suggestions.`
+                                : `Give me a comprehensive list of at least 8-10 professional descriptions for this job title or search term: ${title}. Make them specific and relevant.`
                         },
                     ],
+                    max_tokens: 1000,
+                    temperature: 0.7,
                 },
                 {
                     headers: {

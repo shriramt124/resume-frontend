@@ -1,14 +1,15 @@
 import React, { useEffect } from "react";
 import ContentItem from "@/components/ContentItem";
-import FormField from "@/components/FormField";
 import Editor from "react-simple-wysiwyg";
+import SmartInputField from "@/components/SmartInputField";
+import SuggestionDropdown from "@/components/SuggestionDropdown";
 
 const OtherTab = ({
-                      formData,
-                      updateFormData,
-                      activeIndex,
-                      setActiveIndex
-                  }) => {
+    formData,
+    updateFormData,
+    activeIndex,
+    setActiveIndex
+}) => {
     useEffect(() => {
         if (!formData.other_title?.length) {
             initializeEmptyOther();
@@ -33,6 +34,24 @@ const OtherTab = ({
         setActiveIndex(Math.max(0, activeIndex - 1));
     };
 
+    const handleSuggestionClick = (suggestion, index) => {
+        const currentContent = formData.other_description[index] || '';
+        const bulletPoint = `<ul><li>${suggestion}</li></ul>`;
+
+        let newContent;
+        if (!currentContent) {
+            newContent = bulletPoint;
+        } else if (currentContent.includes('</ul>')) {
+            newContent = currentContent.replace('</ul>', `<li>${suggestion}</li></ul>`);
+        } else {
+            newContent = currentContent + bulletPoint;
+        }
+
+        const newArray = [...formData.other_description];
+        newArray[index] = newContent;
+        updateFormData('other_description', newArray);
+    };
+
     if (!formData.other_title?.length) {
         return null;
     }
@@ -50,21 +69,34 @@ const OtherTab = ({
                 >
                     <div className="p-3 bg-white space-y-3">
                         <div className="grid grid-cols-1 gap-3">
-                            <FormField
-                                label="Other Title"
+                            <SmartInputField
+                                label="Other Achievement Title"
                                 value={formData.other_title[index] || ''}
                                 onChange={(e) => {
                                     const newArray = [...formData.other_title];
                                     newArray[index] = e.target.value;
                                     updateFormData('other_title', newArray);
                                 }}
-                                placeholder="e.g., Achievement Title"
-                                required
+                                currentDescription={formData.other_description}
+                                onDescriptionChange={(e) => updateFormData('other_description', e.target.value)}
+                                placeholder="e.g., Leadership Award"
+                                className="bg-white"
+                                promptType="provide details for this achievement:"
+                                index={index}
                             />
                         </div>
                         <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
                             <div className="flex items-center justify-between mb-2">
                                 <label className="text-sm text-gray-600">Description</label>
+                                <SuggestionDropdown
+                                    onSuggestionClick={(suggestion) => handleSuggestionClick(suggestion, index)}
+                                    title={formData.other_title[index] || 'achievement'}
+                                    customPrompt="provide detailed descriptions and impact of this achievement:"
+                                    isSuggestionSelected={(suggestion) => {
+                                        const content = formData.other_description[index] || '';
+                                        return content.includes(suggestion);
+                                    }}
+                                />
                             </div>
                             <Editor
                                 value={formData.other_description[index] || ''}

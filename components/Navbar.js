@@ -327,16 +327,11 @@ const Navbar = () => {
             <div className="  mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo Section */}
-                    <div className="flex items-center">
-                        <Link href="/builder?templateId=modern" className="flex items-center space-x-2 group">
-                            <Image
-                                src="/logo.jpg"
-                                width={140}
-                                height={100}
-                                alt="HireMeAI Logo"
-                                className=""
-                            />
-
+                    <div className="flex items-center text-3xl font-bold">
+                        <Link href="/dashboard" className="flex items-center space-x-2 group">
+                            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hover:from-purple-600 hover:to-blue-600 transition-all duration-300 transform group-hover:scale-105">
+                                Hire.me
+                            </span>
                         </Link>
                     </div>
 

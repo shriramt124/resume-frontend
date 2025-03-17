@@ -94,14 +94,15 @@ const PersonalInfo = ({ formData, updateFormData }) => {
 
                 {/* Professional Summary Title */}
                 <div className="p-4 bg-gray-50/70 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-200">
-                    <SmartInputField
+                    <input
                         label="Professional Summary Title"
                         value={formData.professional_summary}
                         onChange={(e) => updateFormData('professional_summary', e.target.value)}
                         currentDescription={formData.professional_description}
                         onDescriptionChange={(e) => updateFormData('professional_description', e.target.value)}
                         placeholder="e.g., Working as full time backend developer."
-                        className="bg-white shadow-sm"
+                        className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-lg
+                        outline-none transition-colors hover:border-blue-400 focus:border-blue-500"
                         promptType="provide a professional summary based on this title:"
                     />
                 </div>

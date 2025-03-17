@@ -178,7 +178,7 @@ const Experience = ({ formData, updateFormData }) => {
                                 </div>
 
                                 <div className="grid grid-cols-1 gap-3">
-                                    <SmartInputField
+                                    <input
                                         label="Job Title"
                                         value={formData.job_title[index] || ''}
                                         onChange={(e) => {
@@ -189,7 +189,8 @@ const Experience = ({ formData, updateFormData }) => {
                                         currentDescription={formData.job_description}
                                         onDescriptionChange={(e) => updateFormData('job_description', e.target.value)}
                                         placeholder="e.g., Software Engineer"
-                                        className="bg-white"
+                                        className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-lg
+                        outline-none transition-colors hover:border-blue-400 focus:border-blue-500"
                                         promptType="provide a job experience details based on this title:"
                                         index={index}
                                     />

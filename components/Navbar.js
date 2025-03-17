@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from "react";
 import Image from 'next/image';
+ 
 import {
     Menu,
     X,
@@ -330,7 +331,7 @@ const Navbar = () => {
                     <div className="flex items-center text-3xl font-bold">
                         <Link href="/dashboard" className="flex items-center space-x-2 group">
                             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hover:from-purple-600 hover:to-blue-600 transition-all duration-300 transform group-hover:scale-105">
-                                Hire.me
+                                <Image src="/logoHireme1.png"  width={150} height={100} />
                             </span>
                         </Link>
                     </div>

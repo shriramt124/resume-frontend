@@ -7,14 +7,32 @@ import {
     faChartLine, faShieldAlt, faCheckCircle, faCogs
 } from '@fortawesome/free-solid-svg-icons';
 
-const IndustrialResumeTemplate = ({ data }) => {
+const IndustrialResumeTemplate = ({  data = {},
+                                      fontStyles = {},
+                                      defaultData = {},
+                                      isModalView = false, }) => {
     // Function to render HTML content safely
     const renderHTML = (html) => {
         return { __html: html };
     };
+    const mergeDataWithDefaults = (data, defaultData) => {
+        const mergedData = { ...defaultData };
+        for (const key in data) {
+            if (Array.isArray(data[key])) {
+                const hasNonEmptyValues = data[key].some(item => item !== '' && item !== undefined);
+                if (data[key].length > 0 && hasNonEmptyValues) {
+                    mergedData[key] = data[key];
+                }
+            } else if (data[key] !== undefined && data[key] !== '') {
+                mergedData[key] = data[key];
+            }
+        }
+        return mergedData;
+    };
 
+    const mergedData = mergeDataWithDefaults(data, defaultData);
     // Define colors from the data or use defaults
-    const primaryColor = data?.primary_color || '#0f172a';
+    const primaryColor = fontStyles.font_color || '#0f172a';
     const secondaryColor = data?.secondary_color || '#475569';
     const accentColor = data?.accent_color || '#f59e0b';
     const surfaceColor = data?.surface_color || '#f8fafc';
@@ -25,9 +43,10 @@ const IndustrialResumeTemplate = ({ data }) => {
         <div
             className="mx-auto bg-white shadow-lg relative max-w-4xl"
             style={{
-                fontFamily: data?.font_family || 'Roboto Condensed, -apple-system, sans-serif',
-                fontWeight: data?.is_font_bold ? 'bold' : 'normal',
-                fontStyle: data?.is_font_italic ? 'italic' : 'normal'
+                fontFamily: fontStyles?.font_family || 'Roboto Condensed, -apple-system, sans-serif',
+                fontWeight: fontStyles?.is_font_bold ? 'bold' : 'normal',
+                fontStyle: fontStyles?.is_font_italic ? 'italic' : 'normal',
+                color: primaryColor,
             }}
         >
             {/* Header */}

@@ -31,10 +31,11 @@ const HighContractTemplate = ({
     return (
         <div className="w-full bg-white"
              style={{
-                 fontFamily: data.font_family || "'Arial Black', 'Arial Bold', Arial, sans-serif",
+                 fontFamily: fontStyles.font_family || "'Arial Black', 'Arial Bold', Arial, sans-serif",
                  lineHeight: 1.4,
-                 fontWeight: data.is_font_bold ? 'bold' : 'normal',
-                 fontStyle: data.is_font_italic ? 'italic' : 'normal'
+                 fontWeight: fontStyles.is_font_bold ? 'bold' : 'normal',
+                 fontStyle: fontStyles.is_font_italic ? 'italic' : 'normal',
+                 color: fontStyles.font_color,
              }}>
 
             {/* Header Section */}
@@ -42,7 +43,7 @@ const HighContractTemplate = ({
                 <h1 className="text-5xl uppercase mb-3 tracking-tight text-white">
                     {`${mergedData.first_name || 'John'} ${mergedData.last_name || 'Doe'}`}
                 </h1>
-                <p className="text-2xl uppercase font-bold" style={{ color: data.font_color || 'white' }}>
+                <p className="text-2xl uppercase font-bold" style={{ color: fontStyles.font_color || 'white' }}>
                     {mergedData.occupation || 'Professional'}
                 </p>
 
@@ -103,13 +104,13 @@ const HighContractTemplate = ({
                     {mergedData.job_title.map((title, index) => (
                         title && (
                             <div key={index} className="mb-5 p-5 border-3 border-black bg-white relative experience-card">
-                                <h3 className="text-xl uppercase mb-1" style={{ color: data.font_color || '#333333' }}>
+                                <h3 className="text-xl uppercase mb-1" style={{ color: fontStyles.font_color || '#333333' }}>
                                     {title}
                                 </h3>
-                                <p className="text-lg font-bold" style={{ color: data.font_color || '#333333' }}>
+                                <p className="text-lg font-bold" style={{ color: fontStyles.font_color || '#333333' }}>
                                     {mergedData.employer?.[index] || ''}
                                 </p>
-                                <p className="font-bold my-1" style={{ color: data.font_color || '#666666' }}>
+                                <p className="font-bold my-1" style={{ color: fontStyles.font_color || '#666666' }}>
                                     {`${mergedData.job_begin?.[index] || ''} - ${mergedData.job_end?.[index] || ''}`}
                                 </p>
                                 <div dangerouslySetInnerHTML={{ __html: mergedData.job_description?.[index] || '' }} />
@@ -127,13 +128,13 @@ const HighContractTemplate = ({
                     </h2>
                     {mergedData.college.map((college, index) => (
                         <div key={index} className="mb-5 p-4 border-3 border-black bg-white relative ml-5 education-card">
-                            <h3 className="text-xl uppercase mb-1" style={{ color: data.font_color || '#333333' }}>
+                            <h3 className="text-xl uppercase mb-1" style={{ color: fontStyles.font_color || '#333333' }}>
                                 {mergedData.degree?.[index] || ''}
                             </h3>
-                            <p className="text-lg font-bold" style={{ color: data.font_color || '#333333' }}>
+                            <p className="text-lg font-bold" style={{ color: fontStyles.font_color || '#333333' }}>
                                 {college}
                             </p>
-                            <p className="font-bold my-1" style={{ color: data.font_color || '#666666' }}>
+                            <p className="font-bold my-1" style={{ color: fontStyles.font_color || '#666666' }}>
                                 {`${mergedData.college_begin?.[index] || ''} - ${mergedData.college_end?.[index] || ''}`}
                             </p>
                             {mergedData.college_description?.[index] && (
@@ -153,7 +154,7 @@ const HighContractTemplate = ({
                     <div className="grid grid-cols-2 gap-5">
                         {mergedData.certificate_title.map((title, index) => (
                             <div key={index} className="p-4 border-3 border-black bg-white relative certificate-card">
-                                <h3 className="text-xl uppercase mb-1" style={{ color: data.font_color || '#333333' }}>
+                                <h3 className="text-xl uppercase mb-1" style={{ color: fontStyles.font_color || '#333333' }}>
                                     {title}
                                 </h3>
                                 {mergedData.certificate_description?.[index] && (

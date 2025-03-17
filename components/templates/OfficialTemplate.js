@@ -4,23 +4,41 @@ import React from 'react';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faEnvelope, faPhone, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 
-const OfficialTemplate = ({ data }) => {
+const OfficialTemplate = ({ data = {},
+                              fontStyles = {},
+                              defaultData = {},
+                              isModalView = false, }) => {
     // Function to render HTML content safely
     const renderHTML = (html) => {
         return { __html: html };
     };
 
     // Define theme colors from data or use defaults
-    const primaryColor = data?.primary_color || '#1e293b';
-    const secondaryColor = data?.secondary_color || '#475569';
-    const accentColor = data?.accent_color || '#3b82f6';
-    const surfaceColor = data?.surface_color || '#f8fafc';
+    const primaryColor = fontStyles?.font_color || '#1e293b';
+    const secondaryColor = fontStyles?.secondary_color || '#475569';
+    const accentColor = fontStyles?.accent_color || '#3b82f6';
+    const surfaceColor = fontStyles?.surface_color || '#f8fafc';
+    const mergeDataWithDefaults = (data, defaultData) => {
+        const mergedData = { ...defaultData };
+        for (const key in data) {
+            if (Array.isArray(data[key])) {
+                const hasNonEmptyValues = data[key].some(item => item !== '' && item !== undefined);
+                if (data[key].length > 0 && hasNonEmptyValues) {
+                    mergedData[key] = data[key];
+                }
+            } else if (data[key] !== undefined && data[key] !== '') {
+                mergedData[key] = data[key];
+            }
+        }
+        return mergedData;
+    };
 
+    const mergedData = mergeDataWithDefaults(data, defaultData);
     return (
         <div className="w-full font-sans" style={{
-            fontFamily: data?.font_family || 'Arial, sans-serif',
-            fontWeight: data?.is_font_bold ? 'bold' : 'normal',
-            fontStyle: data?.is_font_italic ? 'italic' : 'normal'
+            fontFamily: fontStyles?.font_family || 'Arial, sans-serif',
+            fontWeight: fontStyles?.is_font_bold ? 'bold' : 'normal',
+            fontStyle: fontStyles?.is_font_italic ? 'italic' : 'normal'
         }}>
             <div className="flex flex-col md:flex-row">
                 {/* Left Column */}

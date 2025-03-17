@@ -29,7 +29,7 @@ const ProfessionalTemplate = ({
         '--accent': data.accent_color || '#60a5fa',
         '--accent-light': data.accent_light || '#93c5fd',
         '--text-light': '#ffffff',
-        '--text-dark': data.text_color || '#1a202c',
+        '--text-dark': fontStyles.font_color || '#1a202c',
         '--text-muted': data.muted_color || '#64748b',
         '--background': data.bg_color || '#ffffff',
         '--surface': data.surface_color || '#f8fafc',
@@ -42,9 +42,9 @@ const ProfessionalTemplate = ({
             className="min-h-[297mm] flex"
             style={{
                 ...cssVariables,
-                fontFamily: data.font_family || "'Poppins', -apple-system, sans-serif",
-                fontWeight: data.is_font_bold ? 'bold' : 'normal',
-                fontStyle: data.is_font_italic ? 'italic' : 'normal',
+                fontFamily: fontStyles.font_family || "'Poppins', -apple-system, sans-serif",
+                fontWeight: fontStyles.is_font_bold ? 'bold' : 'normal',
+                fontStyle: fontStyles.is_font_italic ? 'italic' : 'normal',
                 background: 'var(--background)',
                 color: 'var(--text-dark)',
             }}

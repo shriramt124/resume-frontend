@@ -24,8 +24,8 @@ const DynamicTemplate = ({
     const mergedData = mergeDataWithDefaults(data, defaultData);
 
     const cssVariables = {
-        '--primary': data.primary_color || '#0f172a',
-        '--secondary': data.secondary_color || '#334155',
+        '--primary': fontStyles.font_color || '#0f172a',
+        '--secondary': fontStyles.font_color || '#334155',
         '--accent': data.accent_color || '#6366f1',
         '--accent-soft': data.accent_soft || '#818cf8',
         '--success': data.success_color || '#10b981',
@@ -46,9 +46,10 @@ const DynamicTemplate = ({
             className="grid grid-cols-[380px_1fr] min-h-[297mm] relative bg-[var(--surface-1)]"
             style={{
                 ...cssVariables,
-                fontFamily: data.font_family || "'Plus Jakarta Sans', system-ui, sans-serif",
-                fontWeight: data.is_font_bold ? 'bold' : 'normal',
-                fontStyle: data.is_font_italic ? 'italic' : 'normal',
+                fontFamily: fontStyles.font_family || "'Plus Jakarta Sans', system-ui, sans-serif",
+                fontWeight: fontStyles.is_font_bold ? 'bold' : 'normal',
+                fontStyle: fontStyles.is_font_italic ? 'italic' : 'normal',
+                color:fontStyles.font_color,
             }}
         >
             {/* Sidebar */}

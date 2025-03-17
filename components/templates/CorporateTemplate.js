@@ -24,9 +24,9 @@ const CorporateTemplate = ({
     const mergedData = mergeDataWithDefaults(data, defaultData);
 
     const cssVariables = {
-        '--primary': data.primary_color || '#2563eb',
-        '--text-primary': data.text_primary_color || '#1f2937',
-        '--text-secondary': data.text_secondary_color || '#4b5563',
+        '--primary': fontStyles.font_color || '#2563eb',
+        '--text-primary': fontStyles.font_color || '#1f2937',
+        '--text-secondary': fontStyles.font_color || '#4b5563',
         '--border-light': data.border_color || '#e5e7eb',
         '--bg-light': data.bg_light_color || '#f8fafc',
         '--bg-tag': data.bg_tag_color || '#f1f5f9',
@@ -37,10 +37,10 @@ const CorporateTemplate = ({
             className="w-full mx-auto bg-white p-2"
             style={{
                 ...cssVariables,
-                fontFamily: data.font_family || "'Inter', 'Helvetica Neue', Arial, sans-serif",
-                fontWeight: data.is_font_bold ? 'bold' : 'normal',
-                fontStyle: data.is_font_italic ? 'italic' : 'normal',
-                color: 'var(--text-primary)',
+                fontFamily: fontStyles.font_family || "'Inter', 'Helvetica Neue', Arial, sans-serif",
+                fontWeight: fontStyles.is_font_bold ? 'bold' : 'normal',
+                fontStyle: fontStyles.is_font_italic ? 'italic' : 'normal',
+                color: fontStyles.font_color
             }}
         >
             {/* Header Section */}

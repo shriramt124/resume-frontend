@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from "react";
 import Image from 'next/image';
- 
+
 import {
     Menu,
     X,
@@ -109,9 +109,8 @@ const Navbar = () => {
         <Link
             href={`/builder?userProfileId=${profile.id}`}
             onClick={() => handleActiveResume(profile)}
-            className={`flex items-center px-6 py-2 text-sm hover:bg-gray-100 transition-all duration-200 ${
-                isMobile ? 'rounded-md' : ''
-            } ${activeProfileId === profile.id ? 'bg-blue-50' : ''}`}
+            className={`flex items-center px-6 py-2 text-sm hover:bg-gray-100 transition-all duration-200 ${isMobile ? 'rounded-md' : ''
+                } ${activeProfileId === profile.id ? 'bg-blue-50' : ''}`}
         >
             <div className="flex items-center flex-1">
                 {activeProfileId === profile.id ? (
@@ -119,11 +118,10 @@ const Navbar = () => {
                 ) : (
                     <span className="w-2 h-2 bg-gray-400 rounded-full mr-2" />
                 )}
-                <span className={`${
-                    activeProfileId === profile.id
+                <span className={`${activeProfileId === profile.id
                     ? 'text-[#22f9c9] font-medium'
-                        : 'text-gray-600'
-                }`}>
+                    : 'text-gray-600'
+                    }`}>
                     {profile.first_name} {profile.last_name}
                 </span>
             </div>
@@ -140,7 +138,7 @@ const Navbar = () => {
                         <h3 className="text-sm font-medium text-gray-900">Your Resumes</h3>
                         <Link
                             href="/resumes"
-                                className="flex items-center text-sm text-[#14b894] hover:text-[#1e957b]"
+                            className="flex items-center text-sm text-[#14b894] hover:text-[#1e957b]"
                         >
                             View All
                             <ExternalLink className="ml-1 h-4 w-4" />
@@ -167,7 +165,7 @@ const Navbar = () => {
                         <h3 className="text-sm font-medium text-gray-900">Your Resumes</h3>
                         <Link
                             href="/resumes"
-                                className="flex items-center text-sm text-[#14cda5] hover:text-[#26bb9b]"
+                            className="flex items-center text-sm text-[#14cda5] hover:text-[#26bb9b]"
                         >
                             View All
                             <ExternalLink className="ml-1 h-4 w-4" />
@@ -208,7 +206,7 @@ const Navbar = () => {
     const renderAuthContent = () => {
         if (!isAuthenticated) {
             return (
-               ""
+                ""
             );
         }
 
@@ -221,10 +219,10 @@ const Navbar = () => {
                         className="flex items-center space-x-2 p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
                     >
                         <div className="h-8 w-8 rounded-full bg-[#0cc39b] flex items-center justify-center">
-                            <UserCircle2 className="h-5 w-5 text-white"/>
+                            <UserCircle2 className="h-5 w-5 text-white" />
                         </div>
                         <span className="text-sm font-medium text-gray-700">{userName}</span>
-                        <ChevronDown className={`h-4 w-4 transform transition-transform duration-200 ${showProfileMenu ? 'rotate-180' : ''}`}/>
+                        <ChevronDown className={`h-4 w-4 transform transition-transform duration-200 ${showProfileMenu ? 'rotate-180' : ''}`} />
                     </button>
 
                     {/* Desktop Dropdown Menu */}
@@ -238,27 +236,6 @@ const Navbar = () => {
                                 <Settings className="h-4 w-4 mr-2" />
                                 Profile Settings
                             </Link>
-
-                            <button
-                                onClick={() => setShowResumeDropdown(!showResumeDropdown)}
-                                className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                            >
-                                <FileText className="h-4 w-4 mr-2" />
-                                My Resumes
-                                <ChevronDown className={`ml-auto h-4 w-4 transform transition-transform duration-200 ${showResumeDropdown ? 'rotate-180' : ''}`}/>
-                            </button>
-
-                            {showResumeDropdown && <DesktopResumeList />}
-
-                            <div className="border-t border-gray-100 mt-2">
-                                <button
-                                    onClick={handleLogout}
-                                    className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
-                                >
-                                    <X className="h-4 w-4 mr-2" />
-                                    Logout
-                                </button>
-                            </div>
                         </div>
                     )}
                 </div>
@@ -278,7 +255,7 @@ const Navbar = () => {
             <div className="pt-4 pb-3 border-t border-gray-200">
                 <div className="flex items-center px-3">
                     <div className="h-10 w-10 rounded-full text-[#0f9b7c] flex items-center justify-center">
-                        <UserCircle2 className="h-6 w-6 text-white"/>
+                        <UserCircle2 className="h-6 w-6 text-white" />
                     </div>
                     <div className="ml-3">
                         <div className="text-base font-medium text-gray-800">{userName}</div>
@@ -294,24 +271,7 @@ const Navbar = () => {
                         Profile Settings
                     </Link>
 
-                    <button
-                        onClick={() => setShowResumeDropdown(!showResumeDropdown)}
-                        className="flex items-center w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#27ba9a] hover:bg-gray-50"
-                    >
-                        <FileText className="h-5 w-5 mr-2" />
-                        My Resumes
-                        <ChevronDown className={`ml-auto h-5 w-5 transform transition-transform duration-200 ${showResumeDropdown ? 'rotate-180' : ''}`}/>
-                    </button>
 
-                    {showResumeDropdown && <MobileResumeList />}
-
-                    <button
-                        onClick={handleLogout}
-                        className="flex items-center w-full px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50"
-                    >
-                        <X className="h-5 w-5 mr-2" />
-                        Logout
-                    </button>
                 </div>
             </div>
         );
@@ -331,7 +291,7 @@ const Navbar = () => {
                     <div className="flex items-center text-3xl font-bold">
                         <Link href="/dashboard" className="flex items-center space-x-2 group">
                             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hover:from-purple-600 hover:to-blue-600 transition-all duration-300 transform group-hover:scale-105">
-                                <Image src="/logoHireme1.png"  width={150} height={100} />
+                                <Image src="/logoHireme1.png" width={150} height={100} />
                             </span>
                         </Link>
                     </div>
@@ -367,9 +327,9 @@ const Navbar = () => {
                         >
                             <span className="sr-only">Open main menu</span>
                             {isOpen ? (
-                                <X className="h-6 w-6" aria-hidden="true"/>
+                                <X className="h-6 w-6" aria-hidden="true" />
                             ) : (
-                                <Menu className="h-6 w-6" aria-hidden="true"/>
+                                <Menu className="h-6 w-6" aria-hidden="true" />
                             )}
                         </button>
                     </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Briefcase, Check, Eye, Download, GraduationCap, Plus, Trophy, UserCircle2, X } from 'lucide-react';
+import { Briefcase, Check, Eye, Download, GraduationCap, Plus, Trophy, UserCircle2, X, Menu } from 'lucide-react';
 import { useRouter } from "next/router";
 import Layout from "@/components/Layout";
 import PersonalInfo from '../components/sections/PersonalInfo';
@@ -26,6 +26,7 @@ export default function Builder() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showDownloadSection, setShowDownloadSection] = useState(false);
     const [formData, setFormData] = useState(null);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [fontStyles, setFontStyles] = useState({
         font_family: "sans-serif",
         font_color: "#000000",
@@ -221,14 +222,29 @@ export default function Builder() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 min-w-full">
             {/* Navigation Tabs */}
             <nav className="bg-white shadow-md sticky top-0 z-20 border-b transition-all duration-300">
                 <div className="w-full mx-auto px-4 py-2 md:py-3">
                     <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:items-center md:justify-between">
+                        {/* Mobile Menu Button */}
+                        <div className="flex items-center justify-between md:hidden">
+                            <h1 className="text-lg font-medium text-gray-800">Resume Builder</h1>
+                            <button
+                                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                                className="p-2 rounded-md text-gray-600 hover:bg-gray-100 focus:outline-none"
+                            >
+                                {isMobileMenuOpen ? (
+                                    <X className="h-6 w-6" />
+                                ) : (
+                                    <Menu className="h-6 w-6" />
+                                )}
+                            </button>
+                        </div>
+
                         {/* Navigation Tabs */}
-                        <div className="flex overflow-x-auto hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0 w-full">
-                            <div className="flex space-x-2 md:space-x-4 w-full">
+                        <div className={`${isMobileMenuOpen ? 'flex' : 'hidden'} md:flex overflow-x-auto hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0 w-full md:w-auto flex-col md:flex-row`}>
+                            <div className="flex flex-col md:flex-row md:space-x-4 space-y-2 md:space-y-0 w-full">
                                 {sections.map((section, index) => {
                                     const Icon = section.icon;
                                     return (
@@ -237,30 +253,59 @@ export default function Builder() {
                                             onClick={() => {
                                                 setCurrentSection(section.id);
                                                 setCurrentSectionIndex(index);
+                                                setIsMobileMenuOpen(false);
                                             }}
                                             className={`
                                                 relative py-2.5 px-4 rounded-lg transition-all duration-300 transform
-                                                flex items-center gap-2 min-w-[120px] md:min-w-0
+                                                flex items-center justify-between gap-2 md:min-w-0
+                                                
                                                 ${currentSection === section.id
-                                                    ? 'bg-blue-50 text-blue-600 font-medium scale-[1.02] shadow-sm'
+                                                    ? 'bg-teal-100 text-gray-600 font-medium scale-[1.02] shadow-sm'
                                                     : index <= currentSectionIndex
                                                         ? 'text-gray-700 hover:bg-gray-50 hover:scale-[1.02]'
                                                         : 'text-gray-500 hover:bg-gray-50 hover:scale-[1.02]'
                                                 }
                                             `}
                                         >
+
                                             <Icon className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 ${currentSection === section.id ? 'scale-110' : ''}`} />
                                             <span className="text-sm whitespace-nowrap font-medium">{section.title}</span>
                                             {index < currentSectionIndex && (
-                                                <Check className="w-3 h-3 text-green-500 absolute right-2 top-1/2 -translate-y-1/2 transition-opacity duration-300" />
+                                                <Check className="w-3 h-3 text-green-500 transition-opacity duration-300" />
                                             )}
+
                                         </button>
                                     );
                                 })}
                             </div>
+
+                            {/* Mobile Action Buttons */}
+                            <div className="flex flex-col space-y-2 mt-4 md:hidden px-2">
+                                <button
+                                    onClick={() => {
+                                        setIsModalOpen(true);
+                                        setIsMobileMenuOpen(false);
+                                    }}
+                                    className="flex items-center gap-2 px-4 py-2.5 text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition-all duration-300 text-sm font-medium justify-center"
+                                >
+                                    <Eye className="w-4 h-4" />
+                                    <span>Preview</span>
+                                </button>
+
+                                <button
+                                    onClick={() => {
+                                        setShowDownloadSection(true);
+                                        setIsMobileMenuOpen(false);
+                                    }}
+                                    className="flex items-center gap-2 px-4 py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md transform hover:translate-y-[-1px] justify-center"
+                                >
+                                    <Download className="w-4 h-4" />
+                                    <span>Download</span>
+                                </button>
+                            </div>
                         </div>
-                        {/* Action Buttons */}
-                        <div className="flex items-center gap-3 pt-2 md:pt-0 border-t md:border-t-0">
+                        {/* Action Buttons - Only visible on desktop */}
+                        <div className="hidden md:flex items-center gap-3 pt-2 md:pt-0 border-t md:border-t-0">
                             <button
                                 onClick={() => setIsModalOpen(true)}
                                 className="flex items-center gap-2 px-4 py-2.5 text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition-all duration-300 text-sm font-medium min-w-[100px] justify-center"
@@ -268,10 +313,10 @@ export default function Builder() {
                                 <Eye className="w-4 h-4" />
                                 <span>Preview</span>
                             </button>
-                          
+
                             <button
                                 onClick={() => setShowDownloadSection(true)}
-                                className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md transform hover:translate-y-[-1px] flex-1 md:flex-none justify-center min-w-[120px]"
+                                className="flex items-center gap-2 px-6 py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md transform hover:translate-y-[-1px] flex-1 md:flex-none justify-center min-w-[120px]"
                             >
                                 <Download className="w-4 h-4" />
                                 <span>Download</span>

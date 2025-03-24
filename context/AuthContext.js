@@ -1,9 +1,9 @@
-import {createContext, useContext, useState, useEffect} from 'react'
-import {useRouter} from 'next/router'
+import { createContext, useContext, useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 const AuthContext = createContext()
 
-export function AuthProvider({children}) {
+export function AuthProvider({ children }) {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
     const router = useRouter()
@@ -60,7 +60,7 @@ export function AuthProvider({children}) {
     }, [router.isReady]) // Only run when router is ready
 
     return (
-        <AuthContext.Provider value={{user, loading}}>
+        <AuthContext.Provider value={{ user, loading }}>
             {children}
         </AuthContext.Provider>
     )

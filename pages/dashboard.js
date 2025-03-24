@@ -38,7 +38,7 @@ export default function Home() {
         setIsLoading(true);
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${process.env.NEXT_PUBLIC_WEB_URL}/api/get-resume`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/get-resume`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

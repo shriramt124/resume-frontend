@@ -75,7 +75,7 @@ const ProfilePage = () => {
         setSuccess('');
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_WEB_URL}/api/profile/update`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/profile/update`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

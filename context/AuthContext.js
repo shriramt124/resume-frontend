@@ -27,11 +27,11 @@ export function AuthProvider({children}) {
                 setUser(storedUser)
             }
             setLoading(false)
-            return
+            return;
 
             // We have a token in URL - fetch user details
             try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_WEB_URL}/api/get-customer-details`, {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/get-customer-details`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,

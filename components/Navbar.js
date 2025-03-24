@@ -115,13 +115,13 @@ const Navbar = () => {
         >
             <div className="flex items-center flex-1">
                 {activeProfileId === profile.id ? (
-                    <CheckCircle2 className="h-4 w-4 text-blue-600 mr-2" />
+                    <CheckCircle2 className="h-4 w-4 text-[#17c09b] mr-2" />
                 ) : (
                     <span className="w-2 h-2 bg-gray-400 rounded-full mr-2" />
                 )}
                 <span className={`${
                     activeProfileId === profile.id
-                        ? 'text-blue-600 font-medium'
+                    ? 'text-[#22f9c9] font-medium'
                         : 'text-gray-600'
                 }`}>
                     {profile.first_name} {profile.last_name}
@@ -140,7 +140,7 @@ const Navbar = () => {
                         <h3 className="text-sm font-medium text-gray-900">Your Resumes</h3>
                         <Link
                             href="/resumes"
-                            className="flex items-center text-sm text-blue-600 hover:text-blue-700"
+                                className="flex items-center text-sm text-[#14b894] hover:text-[#1e957b]"
                         >
                             View All
                             <ExternalLink className="ml-1 h-4 w-4" />
@@ -167,7 +167,7 @@ const Navbar = () => {
                         <h3 className="text-sm font-medium text-gray-900">Your Resumes</h3>
                         <Link
                             href="/resumes"
-                            className="flex items-center text-sm text-blue-600 hover:text-blue-700"
+                                className="flex items-center text-sm text-[#14cda5] hover:text-[#26bb9b]"
                         >
                             View All
                             <ExternalLink className="ml-1 h-4 w-4" />
@@ -220,7 +220,7 @@ const Navbar = () => {
                         onClick={() => setShowProfileMenu(!showProfileMenu)}
                         className="flex items-center space-x-2 p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
                     >
-                        <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center">
+                        <div className="h-8 w-8 rounded-full bg-[#0cc39b] flex items-center justify-center">
                             <UserCircle2 className="h-5 w-5 text-white"/>
                         </div>
                         <span className="text-sm font-medium text-gray-700">{userName}</span>
@@ -277,7 +277,7 @@ const Navbar = () => {
         return (
             <div className="pt-4 pb-3 border-t border-gray-200">
                 <div className="flex items-center px-3">
-                    <div className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center">
+                    <div className="h-10 w-10 rounded-full text-[#0f9b7c] flex items-center justify-center">
                         <UserCircle2 className="h-6 w-6 text-white"/>
                     </div>
                     <div className="ml-3">
@@ -287,7 +287,7 @@ const Navbar = () => {
                 <div className="mt-3 space-y-1">
                     <Link
                         href="/profile"
-                        className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                        className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#21a387] hover:bg-gray-50"
                         onClick={closeAllMenus}
                     >
                         <Settings className="h-5 w-5 mr-2" />
@@ -296,7 +296,7 @@ const Navbar = () => {
 
                     <button
                         onClick={() => setShowResumeDropdown(!showResumeDropdown)}
-                        className="flex items-center w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                        className="flex items-center w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#27ba9a] hover:bg-gray-50"
                     >
                         <FileText className="h-5 w-5 mr-2" />
                         My Resumes
@@ -344,7 +344,7 @@ const Navbar = () => {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors duration-200"
+                                    className="flex items-center space-x-1 text-gray-700 hover:text-[#26b596] transition-colors duration-200"
                                 >
                                     <link.icon className="h-4 w-4" />
                                     <span>{link.title}</span>
@@ -387,7 +387,7 @@ const Navbar = () => {
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                                className="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#23a98c] hover:bg-gray-50"
                                 onClick={closeAllMenus}
                             >
                                 <link.icon className="h-5 w-5" />

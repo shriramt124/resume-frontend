@@ -15,6 +15,7 @@ const LoginPage = () => {
     const [showAlert, setShowAlert] = useState(false);
 
     useEffect(() => {
+
         if (error || success) {
             setShowAlert(true);
             const timer = setTimeout(() => {

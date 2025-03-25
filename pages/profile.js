@@ -129,7 +129,7 @@ const ProfilePage = () => {
                             <div className="flex justify-between items-center">
                                 <div>
                                     <h1 className="text-2xl sm:text-3xl font-bold mb-1">Profile Settings</h1>
-                                    <p className="text-blue-100">Update your personal information</p>
+                                    <p className="text-teal-100">Update your personal information</p>
                                 </div>
                                 <button
                                     onClick={() => setIsEditing(!isEditing)}

@@ -9,9 +9,9 @@ export default function ResumesList({ profiles, isLoading, activeProfileId, hand
             {/* New Resume Card */}
             <div
                 onClick={() => handleActiveResume({})}
-                className="border-2 border-dashed border-gray-200 rounded-lg p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center text-center space-y-3 sm:space-y-4 md:space-y-6 transition-all duration-300 hover:border-teal-400 hover:bg-blue-50/30 group cursor-pointer h-[350px] sm:h-[400px] md:h-[480px]"
+                className="border-2 border-dashed border-gray-200 rounded-lg p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center text-center space-y-3 sm:space-y-4 md:space-y-6 transition-all duration-300 hover:border-teal-400 hover:bg-teal-50/30 group cursor-pointer h-[350px] sm:h-[400px] md:h-[480px]"
             >
-                <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <div className="w-16 h-16 rounded-full bg-teal-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                     <h3 className="text-2xl font-semibold text-gray-700">+</h3>
                 </div>
                 <div className="space-y-2">

@@ -214,30 +214,12 @@ const Navbar = () => {
             <>
                 {/* Desktop Profile Menu */}
                 <div className="relative">
-                    <button
-                        onClick={() => setShowProfileMenu(!showProfileMenu)}
-                        className="flex items-center space-x-2 p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
-                    >
+                    <div className="flex items-center space-x-2 p-2 rounded-full">
                         <div className="h-8 w-8 rounded-full bg-[#0cc39b] flex items-center justify-center">
                             <UserCircle2 className="h-5 w-5 text-white" />
                         </div>
                         <span className="text-sm font-medium text-gray-700">{userName}</span>
-                        <ChevronDown className={`h-4 w-4 transform transition-transform duration-200 ${showProfileMenu ? 'rotate-180' : ''}`} />
-                    </button>
-
-                    {/* Desktop Dropdown Menu */}
-                    {showProfileMenu && (
-                        <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 border border-gray-100">
-                            <div className="px-4 py-2 border-b border-gray-100">
-                                <p className="text-sm font-medium text-gray-900">{userName}</p>
-                            </div>
-
-                            <Link href="/profile" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                                <Settings className="h-4 w-4 mr-2" />
-                                Profile Settings
-                            </Link>
-                        </div>
-                    )}
+                    </div>
                 </div>
             </>
         );
@@ -261,18 +243,7 @@ const Navbar = () => {
                         <div className="text-base font-medium text-gray-800">{userName}</div>
                     </div>
                 </div>
-                <div className="mt-3 space-y-1">
-                    <Link
-                        href="/profile"
-                        className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#21a387] hover:bg-gray-50"
-                        onClick={closeAllMenus}
-                    >
-                        <Settings className="h-5 w-5 mr-2" />
-                        Profile Settings
-                    </Link>
-
-
-                </div>
+                <div className="mt-3 space-y-1"></div>
             </div>
         );
     };

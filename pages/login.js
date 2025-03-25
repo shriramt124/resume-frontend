@@ -3,6 +3,8 @@ import { Mail, ArrowRight, Loader2 } from 'lucide-react';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import Layout from '@/components/Layout';
 import { useRouter } from 'next/router';
+import InputWithIcon from '@/components/InputWithIcon';
+import AlertMessage from '@/components/ui/AlertMessage';
 
 const LoginPage = () => {
     const router = useRouter();
@@ -70,58 +72,26 @@ const LoginPage = () => {
                     </div>
 
                     {/* Alert Messages */}
-                    <div className={`transition-all duration-300 ease-in-out mb-6 ${
-                        showAlert ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
-                    }`}>
-                        {error && (
-                            <Alert variant="destructive">
-                                <AlertTitle className="flex items-center">
-                                    <span className="mr-2">⚠️</span> Error
-                                </AlertTitle>
-                                <AlertDescription>{error}</AlertDescription>
-                            </Alert>
-                        )}
-                        {success && (
-                            <Alert className="bg-green-50 text-green-700 border-green-200">
-                                <AlertTitle className="flex items-center">
-                                    <span className="mr-2">✅</span> Success
-                                </AlertTitle>
-                                <AlertDescription>{success}</AlertDescription>
-                            </Alert>
-                        )}
-                    </div>
+                    <AlertMessage error={error} success={success} showAlert={showAlert} />
 
                     <form onSubmit={handleSendOTP} className="space-y-6">
-                        <div className="w-full">
-                            <label className="block text-gray-600 mb-2 text-md">
-                                Email Address
-                            </label>
-                            <div className="relative rounded-lg border border-gray-300 hover:border-blue-400 focus-within:border-blue-500 transition-colors">
-                                <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                                    <Mail className="w-5 h-5 text-blue-500" />
-                                </div>
-                                <input
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full pl-12 pr-4 py-3.5 bg-transparent outline-none text-gray-900 placeholder-gray-500"
-                                    placeholder="Enter your email address"
-                                    required
-                                />
-                            </div>
-                            {email && !validateEmail(email) && (
-                                <p className="mt-2 text-sm text-red-500">
-                                    Please enter a valid email address
-                                </p>
-                            )}
-                        </div>
+                        <InputWithIcon
+                            label="Email Address"
+                            icon={Mail}
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="Enter your email address"
+                            required={true}
+                            error={email && !validateEmail(email) ? "Please enter a valid email address" : null}
+                        />
 
                         <button
                             type="submit"
                             disabled={loading || !validateEmail(email)}
-                            className="w-full py-3.5 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600
-                            transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
-                            flex items-center justify-center space-x-2"
+                            className="w-full py-3.5 px-4 bg-teal-500 text-white rounded-lg hover:bg-teal-600
+                                    transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
+                                    flex items-center justify-center space-x-2 shadow-sm hover:shadow transform hover:translate-y-[-1px]"
                         >
                             {loading ? (
                                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -136,13 +106,13 @@ const LoginPage = () => {
 
                     <p className="mt-8 text-center text-sm text-gray-600">
                         By continuing, you agree to our{' '}
-                        <a href="#" className="text-blue-500 hover:underline">Terms of Service</a>
+                        <a href="#" className="text-teal-500 hover:underline">Terms of Service</a>
                         {' '}and{' '}
-                        <a href="#" className="text-blue-500 hover:underline">Privacy Policy</a>
+                        <a href="#" className="text-teal-500 hover:underline">Privacy Policy</a>
                     </p>
                 </div>
             </div>
-        </Layout>
+        </Layout >
     );
 };
 

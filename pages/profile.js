@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import Layout from "@/components/Layout";
-import { UserCircle2, Mail, Phone, Loader2, LogOut, Home, Settings, ChevronRight } from 'lucide-react';
+import { UserCircle2, Mail, Phone, Loader2, LogOut, Home, Settings, ChevronRight, FileText, User, Bell, HelpCircle } from 'lucide-react';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const ProfilePage = () => {
     const router = useRouter();
@@ -111,65 +112,15 @@ const ProfilePage = () => {
 
     return (
         <Layout>
-            <div className="min-h-screen flex bg-gradient-to-br from-teal-50 via-white to-teal-100">
+            <div className="min-h-screen flex flex-col md:flex-row">
                 {/* Sidebar Navigation */}
-                <div className="hidden md:flex md:w-64 lg:w-72 flex-col bg-white border-r border-gray-200 shadow-sm">
-                    <div className="p-6 border-b border-gray-100">
-                        <h2 className="text-xl font-bold text-gray-800">Account</h2>
-                        <p className="text-sm text-gray-500 mt-1">Manage your settings</p>
-                    </div>
-
-                    <div className="flex-1 py-6 px-4 space-y-1">
-                        <Link href="/dashboard" className="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-teal-50 hover:text-teal-600 transition-all duration-200 group">
-                            <Home className="w-5 h-5 mr-3 text-gray-500 group-hover:text-teal-500" />
-                            <span>Dashboard</span>
-                        </Link>
-
-                        <Link href="/profile" className="flex items-center px-4 py-3 text-teal-600 bg-teal-50 rounded-lg transition-all duration-200 group">
-                            <UserCircle2 className="w-5 h-5 mr-3 text-teal-500" />
-                            <span>Profile</span>
-                        </Link>
-                    </div>
-
-                    <div className="p-4 border-t border-gray-100">
-                        <button
-                            onClick={handleLogout}
-                            className="flex w-full items-center px-4 py-3 text-red-600 rounded-lg hover:bg-red-50 transition-all duration-200 group"
-                        >
-                            <LogOut className="w-5 h-5 mr-3 text-red-500" />
-                            <span>Logout</span>
-                        </button>
-                    </div>
-                </div>
-
-                {/* Mobile Navigation Bar */}
-                <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-10 shadow-t-lg">
-                    <div className="flex justify-around items-center py-3">
-                        <Link href="/dashboard" className="flex flex-col items-center text-gray-600 hover:text-teal-600">
-                            <Home className="w-6 h-6" />
-                            <span className="text-xs mt-1">Dashboard</span>
-                        </Link>
-
-                        <Link href="/profile" className="flex flex-col items-center text-teal-600">
-                            <UserCircle2 className="w-6 h-6" />
-                            <span className="text-xs mt-1">Profile</span>
-                        </Link>
-
-                        <button
-                            onClick={handleLogout}
-                            className="flex flex-col items-center text-red-600"
-                        >
-                            <LogOut className="w-6 h-6" />
-                            <span className="text-xs mt-1">Logout</span>
-                        </button>
-                    </div>
-                </div>
+               
 
                 {/* Main Content */}
                 <div className="flex-1 p-4 md:p-8 pb-24 md:pb-8">
                     <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1">
                         {/* Header with breadcrumb */}
-                        <div className="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-5 text-white rounded-t-2xl">
+                        <div className="bg-teal-600 px-6 py-5 text-white rounded-t-2xl">
                             <div className="flex items-center text-sm text-teal-100 mb-2">
                                 <Link href="/dashboard" className="hover:text-white transition-colors duration-200">Dashboard</Link>
                                 <ChevronRight className="w-4 h-4 mx-2" />

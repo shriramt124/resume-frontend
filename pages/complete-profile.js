@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { UserCircle2, Mail, Phone, Loader2, ArrowLeft } from 'lucide-react';
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import Layout from '@/components/Layout';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import InputWithIcon from '@/components/InputWithIcon';
+import AlertMessage from '@/components/ui/AlertMessage';
 
 const CompleteProfilePage = () => {
     const router = useRouter();
@@ -18,7 +19,7 @@ const CompleteProfilePage = () => {
     });
 
     useEffect(() => {
-        const storedEmail = sessionStorage.getItem('registerEmail');
+        const storedEmail = sessionStorage.getItem('verifyEmail');
         if (!storedEmail) {
             router.replace('/login');
         } else {
@@ -105,101 +106,51 @@ const CompleteProfilePage = () => {
                     </div>
 
                     {/* Alert Messages */}
-                    <div className={`transition-all duration-300 ease-in-out mb-6 ${
-                        showAlert ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
-                    }`}>
-                        {error && (
-                            <Alert variant="destructive">
-                                <AlertTitle className="flex items-center">
-                                    <span className="mr-2">⚠️</span> Error
-                                </AlertTitle>
-                                <AlertDescription>{error}</AlertDescription>
-                            </Alert>
-                        )}
-                        {success && (
-                            <Alert className="bg-green-50 text-green-700 border-green-200">
-                                <AlertTitle className="flex items-center">
-                                    <span className="mr-2">✅</span> Success
-                                </AlertTitle>
-                                <AlertDescription>{success}</AlertDescription>
-                            </Alert>
-                        )}
-                    </div>
+                    <AlertMessage error={error} success={success} showAlert={showAlert} />
 
                     <form onSubmit={handleCompleteProfile} className="space-y-6">
                         {/* Email Address (Disabled) */}
-                        <div className="w-full">
-                            <label className="block text-gray-600 mb-2 text-sm">
-                                Email Address
-                            </label>
-                            <div className="relative rounded-lg border border-gray-200 bg-gray-50">
-                                <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                                    <Mail className="w-5 h-5 text-gray-400" />
-                                </div>
-                                <input
-                                    type="email"
-                                    value={formData.email}
-                                    disabled
-                                    className="w-full pl-12 pr-4 py-3.5 bg-transparent text-gray-500"
-                                />
-                            </div>
-                        </div>
+                        <InputWithIcon
+                            label="Email Address"
+                            icon={Mail}
+                            type="email"
+                            value={formData.email}
+                            disabled={true}
+                        />
 
                         {/* Full Name */}
-                        <div className="w-full">
-                            <label className="block text-gray-600 mb-2 text-sm">
-                                Full Name
-                            </label>
-                            <div className="relative rounded-lg border border-gray-300 hover:border-blue-400 focus-within:border-blue-500 transition-colors">
-                                <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                                    <UserCircle2 className="w-5 h-5 text-blue-500" />
-                                </div>
-                                <input
-                                    type="text"
-                                    value={formData.name}
-                                    onChange={(e) => setFormData(prev => ({
-                                        ...prev,
-                                        name: e.target.value
-                                    }))}
-                                    className="w-full pl-12 pr-4 py-3.5 bg-transparent outline-none"
-                                    placeholder="Enter your full name"
-                                    required
-                                />
-                            </div>
-                        </div>
+                        <InputWithIcon
+                            label="Full Name"
+                            icon={UserCircle2}
+                            type="text"
+                            value={formData.name}
+                            onChange={(e) => setFormData(prev => ({
+                                ...prev,
+                                name: e.target.value
+                            }))}
+                            placeholder="Enter your full name"
+                            required={true}
+                        />
 
                         {/* Phone Number (Optional) */}
-                        <div className="w-full">
-                            <label className="block text-gray-600 mb-2 text-sm">
-                                Phone Number (Optional)
-                            </label>
-                            <div className="relative rounded-lg border border-gray-300 hover:border-blue-400 focus-within:border-blue-500 transition-colors">
-                                <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                                    <Phone className="w-5 h-5 text-blue-500" />
-                                </div>
-                                <input
-                                    type="tel"
-                                    value={formData.phone}
-                                    onChange={(e) => {
-                                        const value = e.target.value.replace(/\D/g, '');
-                                        if (value.length <= 10) {
-                                            setFormData(prev => ({
-                                                ...prev,
-                                                phone: value
-                                            }));
-                                        }
-                                    }}
-                                    className="w-full pl-12 pr-4 py-3.5 bg-transparent outline-none"
-                                    placeholder="Enter your phone number"
-                                    maxLength="10"
-                                />
-                            </div>
-                            {formData.phone && !validatePhone(formData.phone) && (
-                                <p className="mt-2 text-sm text-red-500">
-                                    Please enter a valid 10-digit phone number
-                                </p>
-                            )}
-                        </div>
+                        <InputWithIcon
+                            label="Phone Number (Optional)"
+                            icon={Phone}
+                            type="tel"
+                            value={formData.phone}
+                            onChange={(e) => {
+                                const value = e.target.value.replace(/\D/g, '');
+                                if (value.length <= 10) {
+                                    setFormData(prev => ({
+                                        ...prev,
+                                        phone: value
+                                    }));
+                                }
+                            }}
+                            placeholder="Enter your phone number"
+                            maxLength="10"
+                            error={formData.phone && !validatePhone(formData.phone) ? "Please enter a valid 10-digit phone number" : null}
+                        />
 
                         {/* Submit Button */}
                         <button

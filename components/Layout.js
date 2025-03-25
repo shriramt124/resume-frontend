@@ -2,10 +2,13 @@ import Head from 'next/head'
 import Navbar from './Navbar'
 import Footer from "@/components/Footer";
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
+import { useAuth } from '@/context/AuthContext';
+import LoadingScreen from './LoadingScreen';
 
 const Layout = ({ children }) => {
     const router = useRouter();
+    const { user, loading: authLoading } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
 
     // List of public routes that don't require authentication
@@ -21,21 +24,24 @@ const Layout = ({ children }) => {
         const isPublicRoute = publicRoutes.some(route => router.pathname === route);
 
         // If it's not a public route, check for authentication
-        if (!isPublicRoute) {
+        if (!isPublicRoute && typeof window !== 'undefined') {
             const token = localStorage.getItem('token');
             if (!token) {
                 router.push('/login');
             }
         }
 
-        setIsLoading(false);
+        // Short delay to prevent flash of loading state
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 100);
+
+        return () => clearTimeout(timer);
     }, [router.pathname]);
 
     // Don't render anything while checking authentication
-    if (isLoading && router.pathname !== '/login') {
-        return <div className="min-h-screen flex items-center justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-300"></div>
-        </div>;
+    if ((isLoading || authLoading) && router.pathname !== '/login') {
+        return <LoadingScreen />;
     }
 
     return (
@@ -54,4 +60,5 @@ const Layout = ({ children }) => {
     );
 };
 
-export default Layout;
+// Memoize the Layout component to prevent unnecessary re-renders
+export default memo(Layout);

@@ -21,17 +21,11 @@ const Navbar = () => {
     const [activeProfileId, setActiveProfileId] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    const navLinks = [
-        // { title: 'Home', href: '/', icon: Home },
-        // { title: 'Templates', href: '/templates', icon: FileText },
-        // { title: 'About', href: '/about', icon: Info },
-        // { title: 'Contact', href: '/contact', icon: Phone },
-    ];
+
 
 
 
     useEffect(() => {
-        console.log(router.pathname)
         const checkAuth = () => {
             const token = localStorage.getItem('token');
             const userData = JSON.parse(localStorage.getItem('userData') || '{}');
@@ -134,9 +128,9 @@ const Navbar = () => {
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center space-x-8">
 
-                        {/* Render auth content based on authentication status */}
-                        {router.pathname !== "/login" && renderAuthContent()}
 
+                        {/* Render auth content based on authentication status */}
+                        {renderAuthContent()}
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -149,14 +143,11 @@ const Navbar = () => {
                             aria-expanded={isOpen}
                         >
                             <span className="sr-only">Open main menu</span>
-                            {router.pathname !== "/login" && (
-                                isOpen ? (
-                                    <X className="h-6 w-6" aria-hidden="true" />
-                                ) : (
-                                    <Menu className="h-6 w-6" aria-hidden="true" />
-                                )
+                            {isOpen ? (
+                                <X className="h-6 w-6" aria-hidden="true" />
+                            ) : (
+                                <Menu className="h-6 w-6" aria-hidden="true" />
                             )}
-
                         </button>
                     </div>
                 </div>
@@ -171,8 +162,7 @@ const Navbar = () => {
 
 
                         {/* Render mobile auth content based on authentication status */}
-                        {router.pathname !== "/login" && renderMobileAuthContent()}
-
+                        {renderMobileAuthContent()}
 
 
                     </div>

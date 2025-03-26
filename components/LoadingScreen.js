@@ -5,12 +5,12 @@ const LoadingScreen = () => {
     return (
         <div className="fixed inset-0 flex flex-col items-center justify-center bg-white">
             <div className="relative">
-                <FileText className="w-16 h-16 text-blue-600 animate-bounce" />
+                <FileText className="w-16 h-16 text-teal-600 animate-bounce" />
                 <div className="absolute -bottom-8 left-1/2 -translate-x-1/2">
                     <div className="flex space-x-2">
-                        <Circle className="w-3 h-3 text-blue-600 animate-pulse" />
-                        <Circle className="w-3 h-3 text-blue-600 animate-pulse delay-150" />
-                        <Circle className="w-3 h-3 text-blue-600 animate-pulse delay-300" />
+                        <Circle className="w-3 h-3 text-teal-600 animate-pulse" />
+                        <Circle className="w-3 h-3 text-teal-600 animate-pulse delay-150" />
+                        <Circle className="w-3 h-3 text-teal-600 animate-pulse delay-300" />
                     </div>
                 </div>
             </div>
@@ -22,13 +22,13 @@ const LoadingScreen = () => {
 
             {/* Progress Bar */}
             <div className="w-64 h-2 mt-8 bg-gray-200 rounded-full overflow-hidden">
-                <div className="h-full bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"
-                     style={{
-                         animation: 'progress 2s ease-in-out infinite',
-                         width: '100%',
-                         transformOrigin: 'left',
-                         transform: 'translateX(-100%)'
-                     }} />
+                <div className="h-full bg-teal-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"
+                    style={{
+                        animation: 'progress 2s ease-in-out infinite',
+                        width: '100%',
+                        transformOrigin: 'left',
+                        transform: 'translateX(-100%)'
+                    }} />
             </div>
         </div>
     );

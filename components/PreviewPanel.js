@@ -14,7 +14,7 @@ export default function PreviewPanel({ formData }) {
     const [activeTab, setActiveTab] = useState('styles'); // 'styles' or 'templates'
     const previewRef = useRef(null);
 
-// Default data for preview
+    // Default data for preview
     const defaultData = {
         first_name: "John",
         last_name: "Doe",
@@ -98,17 +98,15 @@ export default function PreviewPanel({ formData }) {
                     <div className="flex gap-2 mb-4">
                         <button
                             onClick={() => setActiveTab('styles')}
-                            className={`flex-1 p-2 rounded-lg ${
-                                activeTab === 'styles' ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50'
-                            }`}
+                            className={`flex-1 p-2 rounded-lg ${activeTab === 'styles' ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50'
+                                }`}
                         >
                             Styles
                         </button>
                         <button
                             onClick={() => setActiveTab('templates')}
-                            className={`flex-1 p-2 rounded-lg ${
-                                activeTab === 'templates' ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50'
-                            }`}
+                            className={`flex-1 p-2 rounded-lg ${activeTab === 'templates' ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50'
+                                }`}
                         >
                             Templates
                         </button>
@@ -141,7 +139,9 @@ export default function PreviewPanel({ formData }) {
                         <div className="preview-content mx-auto" style={{
                             transform: 'scale(0.8)',
                             transformOrigin: 'top center',
-                            maxWidth: '800px'
+                            maxWidth: '800px',
+                            position: 'relative',
+                            zIndex: 1 // Ensure content is above overlays
                         }}>
                             <Template
                                 data={formData}
@@ -158,7 +158,8 @@ export default function PreviewPanel({ formData }) {
                         flex items-center justify-center 
                         transition-opacity duration-200
                         bg-black/50
-                        ${isHovered ? 'opacity-100' : 'opacity-0 pointer-events-none'}
+                        ${isHovered ? 'opacity-100' : 'opacity-0'}
+                        ${isHovered ? '' : 'pointer-events-none'}
                     `}>
                         <button
                             onClick={() => setIsModalOpen(true)}

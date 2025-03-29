@@ -1,20 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { X, Palette, Eye, Download, Layout } from 'lucide-react';
 import { templates } from "@/lib/constants/templates";
 import TemplateSelector from "@/components/TemplateSelector";
 import SidebarControls from "@/components/SidebarControls";
 import DownloadSection from "@/components/DownloadSection";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 
 const ResumeModal = ({
-                         isOpen,
-                         onRequestClose,
-                         formData,
-                         fontStyles: initialFontStyles,
-                         onTemplateChange,
-                         selectedTemplate: parentSelectedTemplate,
-                         defaultData
-                     }) => {
+    isOpen,
+    onRequestClose,
+    formData,
+    fontStyles: initialFontStyles,
+    onTemplateChange,
+    selectedTemplate: parentSelectedTemplate,
+    defaultData
+}) => {
     const [fontStyles, setFontStyles] = useState(initialFontStyles);
     const [mobileView, setMobileView] = useState('preview');
     const router = useRouter();
@@ -41,7 +41,7 @@ const ResumeModal = ({
                         className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                         aria-label="Close"
                     >
-                        <X className="w-5 h-5"/>
+                        <X className="w-5 h-5" />
                     </button>
                 </div>
 
@@ -52,16 +52,18 @@ const ResumeModal = ({
                         <div className="">
                             <div className="transform scale-75 origin-top">
                                 <div className="p-8">
-                                    <TemplateComponent
-                                        data={formData}
-                                        fontStyles={fontStyles}
-                                        isModalView={true}
-                                        defaultData={defaultData}
-                                    />
+                                    <div className="relative z-10"> {/* Add z-index to ensure content is selectable */}
+                                        <TemplateComponent
+                                            data={formData}
+                                            fontStyles={fontStyles}
+                                            isModalView={true}
+                                            defaultData={defaultData}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="bg-gradient-to-b from-transparent to-white h-24 absolute bottom-0 left-0 right-0 pointer-events-none"/>
+                        <div className="bg-gradient-to-b from-transparent to-white h-24 absolute bottom-0 left-0 right-0 pointer-events-none" />
                     </div>
                 </div>
             </div>
@@ -84,9 +86,9 @@ const ResumeModal = ({
                                             flex-1 py-2 px-4 rounded-md font-medium 
                                             transition-all capitalize
                                             ${mobileView === view
-                                            ? 'bg-white text-blue-600 shadow'
-                                            : 'text-gray-600 hover:bg-white/50'
-                                        }`}
+                                                ? 'bg-white text-blue-600 shadow'
+                                                : 'text-gray-600 hover:bg-white/50'
+                                            }`}
                                     >
                                         {view}
                                     </button>
@@ -185,9 +187,9 @@ const ResumeModal = ({
                                         flex flex-col items-center py-2 px-1 rounded-lg
                                         transition-all
                                         ${mobileView === id
-                                        ? 'bg-white text-blue-600 shadow-sm'
-                                        : 'text-gray-600 hover:bg-white/50'
-                                    }`}
+                                            ? 'bg-white text-blue-600 shadow-sm'
+                                            : 'text-gray-600 hover:bg-white/50'
+                                        }`}
                                 >
                                     <Icon className={`w-5 h-5 mb-1 ${mobileView === id ? 'scale-110' : ''}`} />
                                     <span className="text-xs font-medium">{label}</span>

@@ -14,7 +14,7 @@ const DownloadSection = ({ formData, fontStyles, templateName }) => {
         return null;
     };
 
-    const downloadPDF = async () => {
+    const downloadPDF = async (retryCount = 0) => {
         try {
             const validationError = validateFormData();
             if (validationError) {
@@ -25,23 +25,30 @@ const DownloadSection = ({ formData, fontStyles, templateName }) => {
             setIsLoading(true);
             setError(null);
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_WEB_URL}/api/generate-resume`, {
+            // Log the request payload for debugging
+            const payload = {
+                ...formData,
+                ...fontStyles,
+                templateName: templateName,
+            };
+            console.log("Sending request with payload:", payload);
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/generate-resume`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem('token')
                 },
-                body: JSON.stringify({
-                    ...formData,
-                    ...fontStyles,
-                    templateName:templateName,
-                })
+                body: JSON.stringify(payload)
             });
+            console.log("Response status:", response.status, "Response headers:", Object.fromEntries([...response.headers]));
+            console.log("Response is:", response);
 
             // Check if response is JSON (error) or blob (PDF)
             const contentType = response.headers.get('content-type');
             if (contentType && contentType.includes('application/json')) {
                 const errorData = await response.json();
+                console.log("Error data received:", errorData);
 
                 if (!response.ok) {
                     if (errorData.errors) {
@@ -62,24 +69,106 @@ const DownloadSection = ({ formData, fontStyles, templateName }) => {
                 }
             }
 
+            // Verify we have a valid response before proceeding
+            if (!response.ok) {
+                // Special handling for 500 Internal Server Error
+                if (response.status === 500) {
+                    console.error('Server error (500) occurred when generating PDF');
+
+                    // Log additional information that might help diagnose the issue
+                    console.log('Request payload size:', JSON.stringify(payload).length);
+                    console.log('Template being used:', templateName);
+
+                    // Check if token might be expired
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                        throw new Error('Authentication token is missing. Please log in again.');
+                    }
+
+                    // Implement retry logic (max 3 retries with increasing delay)
+                    if (retryCount < 3) {
+                        // Exponential backoff: 3s, 6s, 9s
+                        const delayMs = 3000 * (retryCount + 1);
+                        console.log(`Retrying PDF generation (attempt ${retryCount + 1} of 3) after ${delayMs / 1000}s delay...`);
+                        setError(`Server error occurred. Retrying in ${delayMs / 1000}s (attempt ${retryCount + 1}/3)...`);
+                        setIsLoading(false);
+                        setTimeout(() => downloadPDF(retryCount + 1), delayMs);
+                        return;
+                    }
+                }
+
+                throw new Error(`Server responded with status: ${response.status}. Please try again later or contact support if the issue persists.`);
+            }
+
+            // Get the blob data
             const blob = await response.blob();
+
+            // Verify the blob is valid and has content
+            if (!blob || blob.size === 0) {
+                throw new Error('Received empty PDF data from server');
+            }
+
+            // Create a meaningful filename
             const filename = `${formData.first_name}_${formData.last_name}_Resume.pdf`;
 
+            // Handle download for IE/Edge
             if (window.navigator && window.navigator.msSaveOrOpenBlob) {
                 window.navigator.msSaveOrOpenBlob(blob, filename);
             } else {
+                // Create object URL
                 const url = window.URL.createObjectURL(blob);
+
+                // Create download link
                 const link = document.createElement('a');
                 link.href = url;
                 link.download = filename;
+
+                // Append to document, click, and clean up
                 document.body.appendChild(link);
                 link.click();
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(link);
+
+                // Small delay before revoking to ensure download starts
+                setTimeout(() => {
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(link);
+                }, 100);
             }
         } catch (error) {
             console.error('Download failed:', error);
-            setError(error.message || 'Something went wrong. Please try again later');
+
+            // More descriptive error messages based on common issues
+            if (error.message.includes('500')) {
+                // Check payload size first as it's a common cause of 500 errors
+                const payloadSize = JSON.stringify({ ...formData, ...fontStyles, templateName }).length;
+                console.log('Payload size (bytes):', payloadSize);
+
+                if (payloadSize > 100000) {
+                    console.warn('Large payload detected, this might be causing the server error');
+                    setError('Your resume data is too large for processing. Please try simplifying your descriptions or removing some content, especially from long text fields.');
+                } else {
+                    setError('The server encountered an error while generating your PDF. This could be due to temporary server issues. Please try again in a few minutes or try a different template.');
+                }
+            } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                setError('Network error: Please check your internet connection and try again.');
+            } else if (error.message.includes('timeout')) {
+                setError('Request timed out: The server took too long to respond. Please try again later.');
+            } else if (error.message.includes('Authentication token')) {
+                setError('Your session has expired. Please refresh the page and log in again.');
+            } else {
+                setError(error.message || 'Something went wrong. Please try again later');
+            }
+
+            // Log additional debugging information
+            console.log('Token available:', !!localStorage.getItem('token'));
+            console.log('Template name:', templateName);
+            console.log('Form data keys:', formData ? Object.keys(formData) : 'No form data');
+            console.log('Font styles:', fontStyles);
+
+            // Additional checks for potential issues
+            if (!formData || Object.keys(formData).length === 0) {
+                console.error('Form data is empty or invalid');
+                setError('Resume data appears to be invalid. Please refresh the page and try again.');
+            }
         } finally {
             setIsLoading(false);
         }

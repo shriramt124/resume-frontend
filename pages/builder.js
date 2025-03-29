@@ -224,7 +224,7 @@ export default function Builder() {
     return (
         <div className="min-h-screen bg-gray-50 min-w-full">
             {/* Navigation Tabs */}
-            <nav className="bg-white shadow-sm sticky top-0 z-20 transition-all duration-300 py-2 px-2">
+            <nav className="bg-white shadow-sm sticky top-0 z-20 transition-all duration-300 py-2 px-2 sm:px-4 md:px-6">
 
                 <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:items-center md:justify-between">
                     {/* Mobile Menu Button */}
@@ -243,7 +243,7 @@ export default function Builder() {
                     </div>
 
                     {/* Navigation Tabs */}
-                    <div className={`${isMobileMenuOpen ? 'flex' : 'hidden'} md:flex overflow-x-auto hide-scrollbar   md:mx-0 md:px-0 w-full  flex-col md:flex-row`}>
+                    <div className={`${isMobileMenuOpen ? 'flex' : 'hidden'} md:flex overflow-x-auto hide-scrollbar md:mx-0 md:px-0 w-full flex-col md:flex-row transition-all duration-300 ease-in-out`}>
                         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 w-full space-x-2">
                             {sections.map((section, index) => {
                                 const Icon = section.icon;
@@ -291,17 +291,6 @@ export default function Builder() {
                                 <Eye className="w-4 h-4" />
                                 <span>Preview</span>
                             </button>
-
-                            <button
-                                onClick={() => {
-                                    setShowDownloadSection(true);
-                                    setIsMobileMenuOpen(false);
-                                }}
-                                className="flex items-center gap-2 px-4 py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md transform hover:translate-y-[-1px] justify-center"
-                            >
-                                <Download className="w-4 h-4" />
-                                <span>Download</span>
-                            </button>
                         </div>
                     </div>
                     {/* Action Buttons - Only visible on desktop */}
@@ -312,14 +301,6 @@ export default function Builder() {
                         >
                             <Eye className="w-4 h-4" />
                             <span>Preview</span>
-                        </button>
-
-                        <button
-                            onClick={() => setShowDownloadSection(true)}
-                            className="flex items-center gap-2 px-6 py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all duration-300 text-sm font-medium shadow-sm hover:shadow-md transform hover:translate-y-[-1px] flex-1 md:flex-none justify-center min-w-[120px]"
-                        >
-                            <Download className="w-4 h-4" />
-                            <span>Download</span>
                         </button>
                     </div>
                 </div>
@@ -365,6 +346,8 @@ export default function Builder() {
                 onTemplateChange={handleTemplateChange}
                 selectedTemplate={selectedTemplate}
                 onDownload={() => {
+                    // This prop is no longer needed as we've added a direct download button in the modal
+                    // but we'll keep it for backward compatibility
                     setIsModalOpen(false);
                     setShowDownloadSection(true);
                 }}

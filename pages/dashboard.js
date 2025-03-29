@@ -7,6 +7,7 @@ import Jobs from '@/components/dashboard-sections/Jobs';
 import JobTracker from '@/components/dashboard-sections/JobTracker';
 import InterviewPrep from '@/components/dashboard-sections/InterviewPrep';
 import SalaryAnalyzer from '@/components/dashboard-sections/SalaryAnalyzer';
+import Profile from '@/pages/profile';
 import { useRouter } from 'next/router';
 import { formatDate } from '@/lib/utils';
 import { CheckCircle2, Clock, ExternalLink } from 'lucide-react';
@@ -129,6 +130,8 @@ export default function Home() {
                                     return <InterviewPrep />;
                                 case 'Salary Analyzer':
                                     return <SalaryAnalyzer />;
+                                case 'Profile Settings':
+                                    return <Profile />;
                                 case 'Builder':
                                     return <Builder onClose={() => setActiveTab('Dashboard')} />;
                                 default:

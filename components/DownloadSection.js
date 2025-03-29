@@ -5,6 +5,11 @@ const DownloadSection = ({ formData, fontStyles, templateName }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    // Make downloadPDF accessible as a static method
+    DownloadSection.prototype.downloadPDF = async function (retryCount = 0) {
+        return downloadPDF(retryCount);
+    };
+
     const validateFormData = () => {
         if (!formData) return "Please fill in the resume details";
         if (!formData.first_name) return "First name is required";
@@ -83,6 +88,12 @@ const DownloadSection = ({ formData, fontStyles, templateName }) => {
                     const token = localStorage.getItem('token');
                     if (!token) {
                         throw new Error('Authentication token is missing. Please log in again.');
+                    }
+
+                    // Check payload size and provide specific error message
+                    const payloadSize = JSON.stringify(payload).length;
+                    if (payloadSize > 100000) {
+                        throw new Error('Your resume data is too large for processing. Please try simplifying your descriptions or removing some content.');
                     }
 
                     // Implement retry logic (max 3 retries with increasing delay)
@@ -202,11 +213,11 @@ const DownloadSection = ({ formData, fontStyles, templateName }) => {
             <button
                 onClick={downloadPDF}
                 disabled={isLoading}
-                className={`w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg 
+                className={`w-full bg-teal-600 hover:bg-teal-700 text-white py-3 px-4 rounded-lg 
                    flex items-center justify-center space-x-2 transition-all duration-200
                    ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}
                    disabled:opacity-50 disabled:cursor-not-allowed
-                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
+                   focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2`}
             >
                 <Download className={`w-5 h-5 ${isLoading ? 'animate-bounce' : ''}`} />
                 <span>{isLoading ? 'Generating PDF...' : 'Download PDF'}</span>

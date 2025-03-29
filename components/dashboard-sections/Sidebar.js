@@ -20,7 +20,7 @@ export default function Sidebar({ activeTab, setActiveTab, setShowBuilder, handl
     const navigationItems = [
         { icon: LayoutDashboard, text: 'Dashboard' },
         { icon: Briefcase, text: 'Jobs' },
-        { icon: LineChart, text: 'Job Tracker' },
+        { icon: LineChart, text: 'Job Tracker', hidden: true },
         { icon: GraduationCap, text: 'Interview Prep' },
         { icon: FileOutput, text: 'Cover Letters', hidden: true },
         { icon: Settings, text: 'Profile Settings' }
@@ -43,11 +43,7 @@ export default function Sidebar({ activeTab, setActiveTab, setShowBuilder, handl
                         href="#"
                         onClick={() => {
                             setActiveTab(item.text);
-                            if (item.text === 'Profile Settings') {
-                                router.push('/profile');
-                            } else {
-                                setShowBuilder(item.text === 'Dashboard');
-                            }
+                            setShowBuilder(item.text === 'Dashboard');
                         }}
                         className={`flex-shrink-0 flex flex-col md:flex-row items-center md:justify-center lg:justify-start md:gap-3 px-3 sm:px-4 py-2 rounded-lg ${activeTab === item.text ? 'bg-teal-100 text-gray-600' : 'text-gray-600 hover:bg-gray-100'} mx-1 sm:mx-2 md:mx-0`}
                     >

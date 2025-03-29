@@ -28,10 +28,10 @@ const ModernTemplate = ({ data = {}, fontStyles, isModalView, defaultData }) => 
         }}
       >
         {/* Heading Section */}
-        <div className={`border-b-2 border-blue-400 pb-4 mb-4 ${isModalView ? 'text-lg' : 'text-sm'}`}>
+        <div className={`border-b-2 border-teal-400 pb-4 mb-4 ${isModalView ? 'text-lg' : 'text-sm'}`}>
           <div>
             <h1 className={`font-bold mb-2 ${isModalView ? 'text-2xl' : 'text-lg'}`}>{`${mergedData.first_name} ${mergedData.last_name}`}</h1>
-            <div className={`text-blue-600 font-medium ${isModalView ? 'text-xl' : 'text-lg'}`}>
+            <div className={`text-teal-600 font-medium ${isModalView ? 'text-xl' : 'text-lg'}`}>
               {mergedData.occupation}
             </div>
           </div>
@@ -58,7 +58,7 @@ const ModernTemplate = ({ data = {}, fontStyles, isModalView, defaultData }) => 
           {mergedData.job_title.map((title, index) => (
             <div key={index} className="mb-4">
               <div className={`font-semibold ${isModalView ? 'text-xl' : 'text-lg'} mb-1`}>{title}</div>
-              <div className="flex justify-between text-blue-600 mb-2">
+              <div className="flex justify-between text-teal-600 mb-2">
                 <span>{mergedData.employer[index]}</span>
                 <span
                   className={`text-gray-500 ${isModalView ? 'text-base' : 'text-sm'}`}>{`${mergedData.job_begin[index]} - ${mergedData.job_end[index]}`}</span>
@@ -79,7 +79,7 @@ const ModernTemplate = ({ data = {}, fontStyles, isModalView, defaultData }) => 
               <div className={`font-semibold ${isModalView ? 'text-xl' : 'text-lg'}`}>{mergedData.degree[index]}</div>
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-blue-600">{college}</span>
+                  <span className="text-teal-600">{college}</span>
                   <span className={`text-gray-500 ${isModalView ? 'text-base' : 'text-sm'}`}>
                     {`${mergedData.college_begin[index]} - ${mergedData.college_end[index]}`}
                   </span>

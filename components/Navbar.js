@@ -31,15 +31,17 @@ const Navbar = () => {
             const userData = JSON.parse(localStorage.getItem('userData') || '{}');
             setIsAuthenticated(!!token);
             setUserName(userData.name || 'User');
+
+            // Get active profile ID from localStorage if present
+            const profileData = JSON.parse(localStorage.getItem('profileData') || '{}');
+            if (profileData.id) {
+                setActiveProfileId(profileData.id);
+            }
         };
 
         checkAuth();
-        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-        setUserName(userData.name || '');
 
-
-
-        // Get active profile ID from URL if present
+        // Also check for profile ID in URL query params
         const { userProfileId } = router.query;
         if (userProfileId) {
             setActiveProfileId(parseInt(userProfileId));

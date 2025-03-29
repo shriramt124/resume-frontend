@@ -19,6 +19,7 @@ export default function Home() {
     const [profiles, setProfiles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [activeProfileId, setActiveProfileId] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const fetchProfiles = async () => {
         setIsLoading(true);
@@ -70,6 +71,45 @@ export default function Home() {
         localStorage.setItem('profileData', JSON.stringify(profile));
         setActiveProfileId(profile.id);
         setActiveTab('Builder');
+    };
+
+    const handleDeleteResume = async (resumeId, e) => {
+        e.stopPropagation(); // Prevent triggering the card click event
+
+        if (window.confirm('Are you sure you want to delete this resume?')) {
+            setIsDeleting(true);
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) return router.push('/login');
+
+                const formData = new FormData();
+                formData.append('resume_id', resumeId);
+
+                const response = await fetch('https://admin.hiremeai.in/delete-resume', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error('Failed to delete resume');
+
+                // Refresh the profiles list after successful deletion
+                fetchProfiles();
+
+                // If the deleted resume was active, clear the active profile
+                if (activeProfileId === resumeId) {
+                    localStorage.removeItem('profileData');
+                    setActiveProfileId(null);
+                }
+            } catch (error) {
+                console.error('Error deleting resume:', error);
+                alert('Failed to delete resume. Please try again.');
+            } finally {
+                setIsDeleting(false);
+            }
+        }
     };
 
     // Using formatDate from utils.js instead of defining it inline
@@ -151,6 +191,8 @@ export default function Home() {
                                                 isLoading={isLoading}
                                                 activeProfileId={activeProfileId}
                                                 handleActiveResume={handleActiveResume}
+                                                handleDeleteResume={handleDeleteResume}
+                                                isDeleting={isDeleting}
                                                 setShowBuilder={setShowBuilder}
                                             />
                                         </div>

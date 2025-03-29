@@ -1,9 +1,9 @@
-import { Clock, CheckCircle2, ExternalLink } from 'lucide-react';
+import { Clock, CheckCircle2, ExternalLink, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { formatDate } from '@/lib/utils';
 
 
-export default function ResumesList({ profiles, isLoading, activeProfileId, handleActiveResume }) {
+export default function ResumesList({ profiles, isLoading, activeProfileId, handleActiveResume, handleDeleteResume, isDeleting }) {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-7xl mx-auto px-2 sm:px-0">
             {/* New Resume Card */}
@@ -69,6 +69,21 @@ export default function ResumesList({ profiles, isLoading, activeProfileId, hand
                                 >
                                     Use Resume
                                     <ExternalLink className="ml-2 h-4 w-4" />
+                                </button>
+                                <button
+                                    onClick={(e) => handleDeleteResume(profile.id, e)}
+                                    disabled={isDeleting}
+                                    className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-transparent rounded-lg hover:bg-red-200 transition-colors duration-200 relative z-10 shadow-sm hover:shadow-md"
+                                    title="Delete Resume"
+                                >
+                                    {isDeleting ? (
+                                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-red-600"></div>
+                                    ) : (
+                                        <>
+                                            <Trash2 className="h-5 w-5" />
+                                            <span className="ml-1">Delete</span>
+                                        </>
+                                    )}
                                 </button>
                             </div>
                         </div>

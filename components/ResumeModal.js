@@ -25,7 +25,32 @@ const ResumeModal = ({
     const [saveSuccess, setSaveSuccess] = useState(false);
     const router = useRouter();
 
-    // Save resume function
+    // Validate form data - extracted common validation logic
+    const validateFormData = (setErrorFn) => {
+        if (!formData) {
+            setErrorFn("Please fill in the resume details");
+            return false;
+        }
+        if (!formData.first_name) {
+            setErrorFn("First name is required");
+            return false;
+        }
+        if (!formData.last_name) {
+            setErrorFn("Last name is required");
+            return false;
+        }
+        if (!formData.email) {
+            setErrorFn("Email is required");
+            return false;
+        }
+        if (!formData.phone) {
+            setErrorFn("Phone number is required");
+            return false;
+        }
+        return true;
+    };
+
+    // Save resume function without retry capability
     const handleSaveResume = async () => {
         try {
             setIsSaving(true);
@@ -33,83 +58,114 @@ const ResumeModal = ({
             setSaveSuccess(false);
 
             // Validate form data
-            if (!formData) {
-                setSaveError("Please fill in the resume details");
-                return;
-            }
-            if (!formData.first_name) {
-                setSaveError("First name is required");
-                return;
-            }
-            if (!formData.last_name) {
-                setSaveError("Last name is required");
-                return;
-            }
-            if (!formData.email) {
-                setSaveError("Email is required");
-                return;
-            }
-            if (!formData.phone) {
-                setSaveError("Phone number is required");
-                return;
-            }
+            if (!validateFormData(setSaveError)) return;
 
-            // Prepare payload
+            const resume_id = JSON.parse(localStorage.getItem("profileData"))?.id || "";
+
+            // Prepare payload with all required fields from the API
             const payload = {
                 ...formData,
                 ...fontStyles,
                 templateName: parentSelectedTemplate,
+                template_id: "modern", // Default template ID
+                is_font_bold: fontStyles.is_font_bold || "1",
+                is_font_italic: fontStyles.is_font_italic || "1",
+                font_color: fontStyles.font_color || "red",
+                font_family: fontStyles.font_family || "Arial",
+                unique_id: formData.unique_id || "1",
+                resume_id: resume_id
             };
 
             // Create FormData object
             const formDataObj = new FormData();
 
             // Add resume_id if it exists
-            console.log(formData.unique_id)
             if (formData.unique_id) {
-                formDataObj.append('resume_id', formData.unique_id);
-            } else {
-                console.log("not getting the resume_id")
+                formDataObj.append('resume_id', resume_id);
             }
 
-            // Add all payload data to FormData
-            Object.keys(payload).forEach(key => {
-                if (payload[key] !== null && payload[key] !== undefined) {
-                    // Handle arrays specially
-                    if (Array.isArray(payload[key])) {
-                        payload[key].forEach((item, index) => {
-                            formDataObj.append(`${key}[${index}]`, item);
-                        });
+            // Add all required fields to FormData according to API requirements
+            const requiredFields = {
+                'template_id': payload.template_id,
+                'first_name': payload.first_name,
+                'last_name': payload.last_name,
+                'email': payload.email,
+                'phone': payload.phone,
+                'occupation': payload.occupation || "Working Professional",
+                'city': payload.city || "Ahmedabad",
+                'country': payload.country || "India",
+                'pincode': payload.pincode || "380015",
+                'dob': payload.dob || "1998-04-25",
+                'professional_description': payload.professional_description || "Working as a Software engineer",
+                'templateName': payload.templateName || "premium",
+                'unique_id': payload.unique_id || "1",
+                'resume_id': payload.resume_id || "224",
+                'is_font_bold': payload.is_font_bold || "1",
+                'is_font_italic': payload.is_font_italic || "1",
+                'font_color': payload.font_color || "red",
+                'font_family': payload.font_family || "Arial"
+            };
+
+            // Append all required fields
+            Object.entries(requiredFields).forEach(([key, value]) => {
+                formDataObj.append(key, value);
+            });
+
+            // Handle array fields
+            const arrayFields = ['job_title', 'employer', 'job_begin', 'job_end', 'job_description',
+                'college', 'degree', 'college_begin', 'college_end', 'college_description',
+                'language', 'skill'];
+
+            arrayFields.forEach(field => {
+                if (payload[field] && Array.isArray(payload[field])) {
+                    if (payload[field].length === 0) {
+                        formDataObj.append(`${field}[]`, "");
                     } else {
-                        formDataObj.append(key, payload[key]);
+                        payload[field].forEach(item => {
+                            formDataObj.append(`${field}[]`, item ?? "");
+                        });
                     }
+                } else if (field === 'skill' && (!payload[field] || !Array.isArray(payload[field]))) {
+                    formDataObj.append('skill[]', "");
                 }
             });
 
+            // Get the token and validate it
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('Authentication token is missing. Please log in again.');
+            }
+
             // Send request to save resume
-            const response = await fetch('https://admin.hiremeai.in/update-resume', {
+            const response = await fetch('https://admin.hiremeai.in/api/update-resume', {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    'Authorization': 'Bearer ' + token
                 },
-                body: formDataObj
+                body: formDataObj,
+                signal: AbortSignal.timeout(30000) // 30 seconds timeout
             });
 
-            // Parse the response
-            const data = await response.json();
-
-            // Check if the request was successful
+            // Check if the response is OK first
             if (!response.ok) {
-                throw new Error(data.message || 'Failed to save resume');
+                if (response.status === 500) {
+                    throw new Error('The server encountered an internal error. Please try again later.');
+                }
+                throw new Error(`Server responded with status: ${response.status}. Please try again later.`);
             }
+
+            // Parse the response
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                throw new Error('Server returned an invalid response format. Please try again later.');
+            }
+
+            const data = await response.json();
 
             // Show success message
             setSaveSuccess(true);
-
-            // Hide success message after 3 seconds
-            setTimeout(() => {
-                setSaveSuccess(false);
-            }, 3000);
+            setIsSaving(false);
+            setTimeout(() => setSaveSuccess(false), 3000);
 
         } catch (error) {
             console.error('Save failed:', error);
@@ -126,26 +182,7 @@ const ResumeModal = ({
             setDownloadError(null);
 
             // Validate form data
-            if (!formData) {
-                setDownloadError("Please fill in the resume details");
-                return;
-            }
-            if (!formData.first_name) {
-                setDownloadError("First name is required");
-                return;
-            }
-            if (!formData.last_name) {
-                setDownloadError("Last name is required");
-                return;
-            }
-            if (!formData.email) {
-                setDownloadError("Email is required");
-                return;
-            }
-            if (!formData.phone) {
-                setDownloadError("Phone number is required");
-                return;
-            }
+            if (!validateFormData(setDownloadError)) return;
 
             // Prepare payload
             const payload = {
@@ -171,25 +208,19 @@ const ResumeModal = ({
 
                 if (!response.ok) {
                     if (errorData.errors) {
-                        // Laravel validation errors
                         const firstError = Object.values(errorData.errors)[0][0];
                         throw new Error(firstError);
                     }
-
-                    // Other API errors
                     throw new Error(errorData.message || 'PDF generation failed');
                 }
             }
 
-            // Verify we have a valid response
             if (!response.ok) {
                 throw new Error(`Server responded with status: ${response.status}. Please try again later.`);
             }
 
             // Get the blob data
             const blob = await response.blob();
-
-            // Verify the blob is valid
             if (!blob || blob.size === 0) {
                 throw new Error('Received empty PDF data from server');
             }
@@ -197,28 +228,19 @@ const ResumeModal = ({
             // Create a meaningful filename
             const filename = `${formData.first_name}_${formData.last_name}_Resume.pdf`;
 
-            // Handle download for IE/Edge
-            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-                window.navigator.msSaveOrOpenBlob(blob, filename);
-            } else {
-                // Create object URL
-                const url = window.URL.createObjectURL(blob);
+            // Handle download
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
 
-                // Create download link
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = filename;
+            setTimeout(() => {
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(link);
+            }, 100);
 
-                // Append to document, click, and clean up
-                document.body.appendChild(link);
-                link.click();
-
-                // Small delay before revoking to ensure download starts
-                setTimeout(() => {
-                    window.URL.revokeObjectURL(url);
-                    document.body.removeChild(link);
-                }, 100);
-            }
         } catch (error) {
             console.error('Download failed:', error);
             setDownloadError(error.message || 'Something went wrong. Please try again later');

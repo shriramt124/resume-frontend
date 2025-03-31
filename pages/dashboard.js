@@ -37,6 +37,7 @@ export default function Home() {
             if (!response.ok) throw new Error('Failed to fetch profiles');
 
             const data = await response.json();
+            console.log(data, "form all")
             if (data && Array.isArray(data.data)) {
                 setProfiles(data.data);
                 // Set active profile from localStorage if exists
@@ -85,7 +86,7 @@ export default function Home() {
                 const formData = new FormData();
                 formData.append('resume_id', resumeId);
 
-                const response = await fetch('https://admin.hiremeai.in/delete-resume', {
+                const response = await fetch('https://admin.hiremeai.in/api/delete-resume', {
                     method: 'POST',
                     headers: {
                         'Authorization': 'Bearer ' + token
@@ -96,7 +97,7 @@ export default function Home() {
                 if (!response.ok) throw new Error('Failed to delete resume');
 
                 // Refresh the profiles list after successful deletion
-                fetchProfiles();
+                await fetchProfiles();
 
                 // If the deleted resume was active, clear the active profile
                 if (activeProfileId === resumeId) {
@@ -162,19 +163,7 @@ export default function Home() {
                     <main className="p-3 sm:p-4 md:p-6 pb-24 md:pb-6 flex justify-center md:justify-start flex-1 overflow-x-hidden">
                         {(() => {
                             switch (activeTab) {
-                                case 'Jobs':
-                                    return <Jobs />;
-                                case 'Job Tracker':
-                                    return <JobTracker />;
-                                case 'Interview Prep':
-                                    return <InterviewPrep />;
-                                case 'Salary Analyzer':
-                                    return <SalaryAnalyzer />;
-                                case 'Profile Settings':
-                                    return <Profile />;
-                                case 'Builder':
-                                    return <Builder onClose={() => setActiveTab('Dashboard')} />;
-                                default:
+                                case 'Dashboard':
                                     return (
                                         <div>
                                             <div className="mb-6">
@@ -197,6 +186,20 @@ export default function Home() {
                                             />
                                         </div>
                                     );
+                                case 'Jobs':
+                                    return <Jobs />;
+                                case 'Job Tracker':
+                                    return <JobTracker />;
+                                case 'Interview Prep':
+                                    return <InterviewPrep />;
+                                case 'Salary Analyzer':
+                                    return <SalaryAnalyzer />;
+                                case 'Profile Settings':
+                                    return <Profile />;
+                                case 'Builder':
+                                    return <Builder onClose={() => setActiveTab('Dashboard')} />;
+                                default:
+                                    return null;
                             }
                         })()}
                     </main>

@@ -43,7 +43,7 @@ export default function Sidebar({ activeTab, setActiveTab, setShowBuilder, handl
                         href="#"
                         onClick={() => {
                             setActiveTab(item.text);
-                            setShowBuilder(item.text === 'Dashboard');
+                            setShowBuilder(false);
                         }}
                         className={`flex-shrink-0 flex flex-col md:flex-row items-center md:justify-center lg:justify-start md:gap-3 px-3 sm:px-4 py-2 rounded-lg ${activeTab === item.text ? 'bg-teal-100 text-gray-600' : 'text-gray-600 hover:bg-gray-100'} mx-1 sm:mx-2 md:mx-0`}
                     >

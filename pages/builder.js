@@ -33,7 +33,7 @@ export default function Builder() {
         is_font_bold: false,
         is_font_italic: false
     });
-    const [selectedTemplate, setSelectedTemplate] = useState(formData?.templateName || 'modern');
+    const [selectedTemplate, setSelectedTemplate] = useState(formData?.templateName || 'creative');
     const router = useRouter();
     const handleTemplateChange = (template) => {
         setSelectedTemplate(template);
@@ -41,6 +41,16 @@ export default function Builder() {
             ...prev,
             templateName: template
         }));
+
+        // Update URL query parameter without causing a full page reload
+        router.push(
+            {
+                pathname: router.pathname,
+                query: { ...router.query, templateId: template }
+            },
+            undefined,
+            { shallow: true }
+        );
     };
     useEffect(() => {
         // This will run when the component mounts and when the router query changes
